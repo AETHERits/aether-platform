@@ -23,3 +23,4 @@ infrastructure/  deploy e infrastruttura
 ## Principio
 
 Ogni modifica significativa deve partire da una GitHub Issue e arrivare a `main` tramite Pull Request e Code Review.
+
