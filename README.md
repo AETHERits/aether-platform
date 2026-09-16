@@ -74,9 +74,22 @@ Ambiente di sviluppo Frontend verificato:
 | npm | 11.16.0 |
 | Sistema operativo | Windows x64 |
 
-Backend: Java + Spring Boot *(versione JDK/Spring Boot da specificare)*.
+##  Backend
 
-Database: *da aggiungere.*
+ **GRUPPO ARES**
+
+🔹 **Java Version:** 17
+🔹 **Spring Boot Version:** 4.0.0
+🔹 **Build Tool:** Maven 3
+
+**Dipendenze:**
+- Spring Web MVC
+- Spring Data JPA
+- Spring Boot Actuator
+- H2 Database
+- Lombok
+
+## Database: *da aggiungere.*
 
 ---
 
