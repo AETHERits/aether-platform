@@ -1,0 +1,101 @@
+<div class="mission-create-container">
+  <h2>Nuova missione</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+    <!-- Obiettivo / Titolo -->
+    <div class="field">
+      <label for="title">Obiettivo / Titolo missione *</label>
+      <input id="title" type="text" formControlName="title" />
+      <small class="error" *ngIf="f['title'].touched && f['title'].errors?.['required']">
+        L'obiettivo è obbligatorio.
+      </small>
+      <small class="error" *ngIf="f['title'].touched && f['title'].errors?.['maxlength']">
+        Massimo 200 caratteri.
+      </small>
+    </div>
+
+    <!-- Descrizione (opzionale) -->
+    <div class="field">
+      <label for="description">Descrizione</label>
+      <textarea id="description" formControlName="description" rows="3"></textarea>
+    </div>
+
+    <!-- Tipo missione -->
+    <div class="field">
+      <label for="missionType">Tipo missione *</label>
+      <select id="missionType" formControlName="missionType">
+        <option value="" disabled selected>Seleziona...</option>
+        <option *ngFor="let t of missionTypes" [value]="t">{{ t }}</option>
+      </select>
+      <small class="error" *ngIf="f['missionType'].touched && f['missionType'].errors?.['required']">
+        Seleziona un tipo di missione.
+      </small>
+    </div>
+
+    <!-- Colonia di origine -->
+    <div class="field">
+      <label for="idOriginColony">Colonia di origine *</label>
+      <select id="idOriginColony" formControlName="idOriginColony">
+        <option [ngValue]="null" disabled selected>Seleziona colonia...</option>
+        <option *ngFor="let c of colonies" [ngValue]="c.idColony">
+          {{ c.name }} ({{ c.code }})
+        </option>
+      </select>
+      <small class="error" *ngIf="f['idOriginColony'].touched && f['idOriginColony'].errors?.['required']">
+        Seleziona una colonia esistente.
+      </small>
+    </div>
+
+    <!-- Finestra temporale -->
+    <div class="field-row">
+      <div class="field">
+        <label for="plannedStartAt">Inizio pianificato *</label>
+        <input id="plannedStartAt" type="datetime-local" formControlName="plannedStartAt" />
+        <small class="error" *ngIf="f['plannedStartAt'].touched && f['plannedStartAt'].errors?.['required']">
+          Data di inizio obbligatoria.
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="plannedEndAt">Fine pianificata *</label>
+        <input id="plannedEndAt" type="datetime-local" formControlName="plannedEndAt" />
+        <small class="error" *ngIf="f['plannedEndAt'].touched && f['plannedEndAt'].errors?.['required']">
+          Data di fine obbligatoria.
+        </small>
+      </div>
+    </div>
+
+    <!-- Errore di coerenza tra le due date (validator di gruppo) -->
+    <small class="error" *ngIf="form.errors?.['dateRangeInvalid'] && f['plannedEndAt'].touched">
+      La data di fine deve essere successiva alla data di inizio.
+    </small>
+
+    <!-- Priorità e rischio -->
+    <div class="field-row">
+      <div class="field">
+        <label for="priority">Priorità *</label>
+        <select id="priority" formControlName="priority">
+          <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="safetyLevel">Livello di rischio *</label>
+        <select id="safetyLevel" formControlName="safetyLevel">
+          <option *ngFor="let s of safetyLevels" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Errore proveniente dal backend -->
+    <div class="server-error" *ngIf="serverError">
+      ⚠️ {{ serverError }}
+    </div>
+
+    <button type="submit" [disabled]="submitting">
+      {{ submitting ? 'Creazione in corso...' : 'Crea missione (Draft)' }}
+    </button>
+
+  </form>
+</div>
