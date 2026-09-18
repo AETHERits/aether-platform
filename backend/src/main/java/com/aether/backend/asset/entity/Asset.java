@@ -1,0 +1,25 @@
+package com.aether.backend.asset.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name= "tipi_asset", schema="aether")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+
+public class Asset {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id_tipo_asset;
+
+    @Column(unique= true, nullable= false)
+    private String codice;
+
+    @Column(nullable= false)
+    private String nome;
+
+    @Enumerated(EnumType.STRING)
+    private Priority criticita_di_default;
+}
