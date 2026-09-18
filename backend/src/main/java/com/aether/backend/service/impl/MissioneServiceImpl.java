@@ -45,7 +45,7 @@ public class MissioneServiceImpl implements MissioneService {
             throw new ConflictException("Esiste gia' una missione con codice '" + request.getCodice() + "'");
         }
 
-        if (!coloniaRepository.existsById(request.getIdColonia())) {
+        if (!coloniaRepository.existsById(Long.valueOf(request.getIdColonia()))) {
             throw new ResourceNotFoundException("Nessuna base/colonia trovata con id " + request.getIdColonia());
         }
 
