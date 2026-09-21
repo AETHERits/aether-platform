@@ -1,0 +1,52 @@
+<h2>Registrazione incidente</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <label>Base *
+    <select formControlName="idColonia">
+      <option [ngValue]="null">Seleziona…</option>
+      @for (c of colonie; track c.id) {
+      <option [ngValue]="c.id">{{ c.nome }}</option>
+      }
+    </select>
+  </label>
+  @if (form.get('idColonia')?.invalid && form.get('idColonia')?.touched) {
+  <small class="errore">La base è obbligatoria.</small>
+  }
+
+  <label>Titolo *
+    <input formControlName="titolo">
+  </label>
+  @if (form.get('titolo')?.invalid && form.get('titolo')?.touched) {
+  <small class="errore">Il titolo è obbligatorio.</small>
+  }
+
+  <label>Descrizione *
+    <textarea formControlName="descrizione"></textarea>
+  </label>
+  @if (form.get('descrizione')?.invalid && form.get('descrizione')?.touched) {
+  <small class="errore">La descrizione è obbligatoria.</small>
+  }
+
+  <label>Severità *
+    <select formControlName="severita">
+      <option [ngValue]="null">Seleziona…</option>
+      @for (s of severitaOptions; track s) {
+      <option [ngValue]="s">{{ s }}</option>
+      }
+    </select>
+  </label>
+  @if (form.get('severita')?.invalid && form.get('severita')?.touched) {
+  <small class="errore">Seleziona una severità valida.</small>
+  }
+
+  <p class="info">ℹ️ Stato iniziale e timestamp sono assegnati dal sistema
+    (APERTO + data/ora correnti): non sono modificabili da questo form.</p>
+
+  <button type="submit" [disabled]="form.invalid">Registra incidente</button>
+</form>
+
+@if (creato) {
+<p class="ok">✅ Incidente <strong>{{ creato.codice }}</strong> registrato —
+  Stato: <strong>{{ creato.stato }}</strong> —
+  Registrato il: {{ creato.registratoIl | date:'dd/MM/yyyy HH:mm' }}</p>
+}
