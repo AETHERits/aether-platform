@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { ResourceCatalogComponent } from './components/resource-catalog/resource-catalog.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ResourceCatalogComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html'
 })
 export class AppComponent {

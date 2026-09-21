@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { finalize } from 'rxjs';
 import { MissionService, ColonyOption } from '../services/mission';
 import { MissionCreateRequest } from '../models/mission.model';
 import { dateRangeValidator } from '../validators/mission.validators';
@@ -17,8 +18,6 @@ export class MissionCreate implements OnInit {
   submitting = false;
   serverError: string | null = null;
 
-  // MOCK temporaneo: sostituire con missionService.getColonies() quando
-  // l'endpoint backend GET /api/colonies sarà pronto.
   colonies: ColonyOption[] = [
     { idColony: 1, code: 'ARES-PRIME', name: 'Ares Prime' },
     { idColony: 2, code: 'VALLES-RO', name: 'Valles Research Outpost' },
@@ -55,7 +54,6 @@ export class MissionCreate implements OnInit {
     );
   }
 
-  // Getter di comodo per accedere ai controlli nel template in modo più leggibile
   get f() {
     return this.form.controls;
   }
@@ -72,26 +70,27 @@ export class MissionCreate implements OnInit {
 
     const payload: MissionCreateRequest = this.form.value;
 
-    this.missionService.createMission(payload).subscribe({
-      next: (response) => {
-        this.submitting = false;
-        // TODO: quando avremo il routing verso la mission list,
-        // qui faremo un redirect + toast di successo con response.code
-        console.log('Missione creata:', response);
-      },
-      error: (err) => {
-        this.submitting = false;
-
-        if (err.status === 409) {
-          this.serverError = 'Conflitto: impossibile creare la missione con questi dati (verificare colonia e finestra temporale).';
-        } else if (err.status === 400 && err.error?.message) {
-          this.serverError = err.error.message;
-        } else if (err.status === 0) {
-          this.serverError = 'Impossibile contattare il server. Verifica la connessione.';
-        } else {
-          this.serverError = 'Errore imprevisto durante la creazione della missione.';
+    this.missionService.createMission(payload)
+      .pipe(
+        finalize(() => {
+          this.submitting = false;
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Missione creata:', response);
+        },
+        error: (err) => {
+          if (err.status === 409) {
+            this.serverError = 'Conflitto: impossibile creare la missione con questi dati (verificare colonia e finestra temporale).';
+          } else if (err.status === 400 && err.error?.message) {
+            this.serverError = err.error.message;
+          } else if (err.status === 0) {
+            this.serverError = 'Impossibile contattare il server. Verifica la connessione.';
+          } else {
+            this.serverError = 'Errore imprevisto durante la creazione della missione.';
+          }
         }
-      }
-    });
+      });
   }
 }
