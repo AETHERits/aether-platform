@@ -14,6 +14,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("AETHER Mars Platform API")
                         .version("1.0")
-                        .description("API backend condivise della piattaforma AETHER"));
+                        .description("API backend della piattaforma AETHER"));
     }
 }
