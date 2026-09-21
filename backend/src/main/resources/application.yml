@@ -5,25 +5,23 @@ spring:
     active: dev
 
 ---
-# Profilo di Sviluppo Locale (H2 in-memory per test rapidi)
+# Profilo di Sviluppo Locale collegato a Supabase
 spring:
   config:
     activate:
       on-profile: dev
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
   datasource:
-    url: ${DB_URL:jdbc:h2:mem:aetherdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
-    driver-class-name: org.h2.Driver
-    username: ${DB_USERNAME:sa}
-    password: ${DB_PASSWORD:}
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    url: ${DB_URL:jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:postgres.uswqqwtlcpkbxydczkyr}
+    password: ${DB_PASSWORD:postgresits.}
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
-    defer-datasource-initialization: true
     show-sql: true
 
 server:
@@ -37,20 +35,3 @@ management:
   endpoint:
     health:
       show-details: always
-
----
-# Profilo Postgres (es. Supabase) - schema gia' creato da backend/DB.sql
-spring:
-  config:
-    activate:
-      on-profile: prod
-  datasource:
-    url: ${DB_URL}
-    driver-class-name: org.postgresql.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
