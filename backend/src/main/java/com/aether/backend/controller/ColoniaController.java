@@ -19,7 +19,7 @@ import java.util.List;
      * REST Controller per la gestione e la consultazione delle basi marziane (ARES-101).
      */
     @RestController
-    @RequestMapping("/api/v1/colonies")
+    @RequestMapping("/api/v1/colonie")
     @RequiredArgsConstructor
     @Tag(name = "Colonie", description = "API per la gestione delle basi e colonie marziane gestite da ARES")
     public class ColoniaController {
@@ -44,8 +44,8 @@ import java.util.List;
                 )
         )
         @GetMapping
-        public ResponseEntity<List<ColoniaResponse>> getAllColonies() {
-            List<ColoniaResponse> colonies = coloniaService.findAll();
-            return ResponseEntity.ok(colonies);
+        public ResponseEntity<List<ColoniaResponse>> getAllColonie() {
+            List<ColoniaResponse> colonie = coloniaService.findAll();
+            return ResponseEntity.ok(colonie);
         }
     }
