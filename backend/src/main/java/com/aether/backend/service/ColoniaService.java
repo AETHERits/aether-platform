@@ -2,6 +2,7 @@ package com.aether.backend.service;
 
 import com.aether.backend.entity.Colonia;
 import com.aether.backend.dto.ColoniaResponse;
+import com.aether.backend.mapper.ColoniaMapper;
 import com.aether.backend.repository.ColoniaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ColoniaService {
     public List<ColoniaResponse> findAll() {
         return coloniaRepository.findByCancellatoFalse()
                 .stream()
-                .map(this::mapToDto)
+                .map(ColoniaMapper::toDTO)
                 .toList();
     }
 
