@@ -36,10 +36,10 @@ public class Missione {
     private String descrizione;
 
     @Column(name = "id_colonia", nullable = false)
-    private Integer idColonia;
+    private Long idColonia;
 
     @Column(name = "id_tipologia", nullable = false)
-    private Integer idTipologia;
+    private Long idTipologia;
 
     @Column(name = "data_inizio_prevista", nullable = false)
     private OffsetDateTime dataInizioPrevista;

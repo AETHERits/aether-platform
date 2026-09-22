@@ -17,8 +17,8 @@ public class MissioneResponse {
     private String codice;
     private String obiettivo;
     private String descrizione;
-    private Integer idColonia;
-    private Integer idTipologia;
+    private Long idColonia;
+    private Long idTipologia;
     private OffsetDateTime dataInizioPrevista;
     private OffsetDateTime dataFinePrevista;
     private Priorita priorita;
