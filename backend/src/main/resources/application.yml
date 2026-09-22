@@ -25,7 +25,6 @@ spring:
       ddl-auto: update
     defer-datasource-initialization: true
     show-sql: true
-    defer-datasource-initialization: true
 
 server:
   port: ${PORT:8080}
