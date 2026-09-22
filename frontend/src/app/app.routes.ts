@@ -1,7 +1,11 @@
-
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'missions/new',
+    pathMatch: 'full'
+  },
   {
     path: '',
     redirectTo: 'incidenti/nuovo',
