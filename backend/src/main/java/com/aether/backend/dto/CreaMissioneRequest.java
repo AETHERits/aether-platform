@@ -25,10 +25,10 @@ public class CreaMissioneRequest {
     private String descrizione;
 
     @NotNull(message = "La colonia/base di destinazione e' obbligatoria")
-    private Integer idColonia;
+    private Long idColonia;
 
     @NotNull(message = "La tipologia di missione e' obbligatoria")
-    private Integer idTipologia;
+    private Long idTipologia;
 
     @NotNull(message = "La data di inizio prevista e' obbligatoria")
     private OffsetDateTime dataInizioPrevista;
