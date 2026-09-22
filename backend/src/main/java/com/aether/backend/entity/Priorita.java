@@ -4,5 +4,5 @@ public enum Priorita {
     BASSA,
     MEDIA,
     ALTA,
-    CRITICA
+    VITALE
 }

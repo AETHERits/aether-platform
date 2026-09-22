@@ -1,6 +1,6 @@
-package com.aether.backend.asset.dto;
+package com.aether.backend.dto;
 
-import com.aether.backend.asset.entity.Priority;
+import com.aether.backend.entity.Priorita;
 import lombok.*;
 
 @Data
@@ -9,5 +9,5 @@ public class AssetDTO {
     private Long id_tipo_asset;
     private String codice;
     private String nome;
-    private Priority criticita_di_default;
+    private Priorita criticita_di_default;
 }

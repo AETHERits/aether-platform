@@ -5,22 +5,22 @@ spring:
     active: dev
 
 ---
-# Profilo di Sviluppo Locale (H2 in-memory per test rapidi)
+# Profilo di Sviluppo (PostgreSQL su Supabase)
 spring:
   config:
     activate:
       on-profile: dev
   datasource:
-    url: ${DB_URL:jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require}
+    # 1. Porta cambiata a 6543 (Transaction Mode) per evitare EMAXCONNSESSION
+    url: ${DB_URL:jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require}
     driver-class-name: org.postgresql.Driver
     username: ${DB_USERNAME:postgres.uswqqwtlcpkbxydczkyr}
     password: ${DB_PASSWORD:postgresits.}
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    # 2. Limitazione della dimensione del pool di connessioni locale
+    hikari:
+      maximum-pool-size: 5
   jpa:
-    database-platform: org.hibernate.dialect.PostgresSQLDialect
+    # 3. 'database-platform' rimosso: Hibernate 6 rileva il dialetto in automatico
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
@@ -37,4 +37,3 @@ management:
   endpoint:
     health:
       show-details: always
-

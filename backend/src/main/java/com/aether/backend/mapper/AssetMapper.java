@@ -1,7 +1,7 @@
-package com.aether.backend.asset.mapper;
+package com.aether.backend.mapper;
 
-import com.aether.backend.asset.dto.AssetDTO;
-import com.aether.backend.asset.entity.Asset;
+import com.aether.backend.dto.AssetDTO;
+import com.aether.backend.entity.Asset;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +18,7 @@ public class AssetMapper {
         );
     }
 
-    public Asset toEntity(AssetDTO dto) {
+    public static Asset toEntity(AssetDTO dto) {
         if (dto == null) return null;
 
         Asset asset = new Asset();

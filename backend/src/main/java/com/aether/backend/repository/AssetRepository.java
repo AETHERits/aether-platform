@@ -1,6 +1,6 @@
-package com.aether.backend.asset.repository;
+package com.aether.backend.repository;
 
-import com.aether.backend.asset.entity.Asset;
+import com.aether.backend.entity.Asset;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

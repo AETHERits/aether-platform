@@ -1,4 +1,4 @@
-package com.aether.backend.service;
+package com.aether.backend.service.impl;
 
 import com.aether.backend.dto.RisorsaCreateRequest;
 import com.aether.backend.dto.RisorsaResponse;
@@ -7,6 +7,7 @@ import com.aether.backend.entity.Risorsa;
 import com.aether.backend.exception.CodiceRisorsaDuplicatoException;
 import com.aether.backend.exception.RisorsaNonTrovataException;
 import com.aether.backend.repository.RisorsaRepository;
+import com.aether.backend.service.RisorsaService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,4 +1,4 @@
-package com.aether.backend.asset.entity;
+package com.aether.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,5 +21,5 @@ public class Asset {
     private String nome;
 
     @Enumerated(EnumType.STRING)
-    private Priority criticita_di_default;
+    private Priorita criticita_di_default;
 }

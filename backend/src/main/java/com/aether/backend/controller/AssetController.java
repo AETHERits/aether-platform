@@ -1,7 +1,7 @@
-package com.aether.backend.asset.controller;
+package com.aether.backend.controller;
 
-import com.aether.backend.asset.dto.AssetDTO;
-import com.aether.backend.asset.service.AssetService;
+import com.aether.backend.dto.AssetDTO;
+import com.aether.backend.service.AssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +26,14 @@ public class AssetController {
         return ResponseEntity.ok(assetService.getAssetById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<AssetDTO> create(@RequestBody AssetDTO dto) {
-        return ResponseEntity.ok(assetService.createAsset(dto));
+    @PostMapping("/aggiungi-asset")
+    public String update(@RequestBody AssetDTO dto) {
+        return assetService.updateAsset(dto);
     }
+
+    @DeleteMapping("/cancella/{id}")
+    public String delete(@PathVariable Long id){
+        return assetService.delete(id);
+    }
+
 }
