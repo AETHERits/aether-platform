@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { Asset, CreateAssetRequest } from '../models/asset.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssetService {
-  private apiUrl = 'http://localhost:8080/api/assets';
-
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private readonly apiUrl = `${environment.apiUrl}/assets`;
 
   getAllAssets(): Observable<Asset[]> {
     return this.http.get<Asset[]>(this.apiUrl);

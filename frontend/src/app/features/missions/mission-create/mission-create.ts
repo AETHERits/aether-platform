@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
-import { MissionService, ColonyOption } from '../services/mission';
+import { MissionService, ColonyOption } from '../services/mission.service';
 import { MissionCreateRequest, MissionResponse } from '../models/mission.model';
 import { dateRangeValidator } from '../validators/mission.validators';
 
@@ -22,11 +22,7 @@ export class MissionCreate implements OnInit {
   showSearch = false;
   searchTerm = '';
 
-  colonies: ColonyOption[] = [
-    { idColony: 1, code: 'ARES-PRIME', name: 'Ares Prime' },
-    { idColony: 2, code: 'VALLES-RO', name: 'Valles Research Outpost' },
-    { idColony: 3, code: 'ELYSIUM-RELAY', name: 'Elysium Relay' }
-  ];
+  colonies: ColonyOption[] = [];
 
   missions: MissionResponse[] = [];
   loading = false;
@@ -62,11 +58,9 @@ export class MissionCreate implements OnInit {
     return value ? (map[value] ?? value) : '';
   }
 
-  constructor(
-    private fb: FormBuilder,
-    private missionService: MissionService,
-    private location: Location
-  ) {}
+  private fb = inject(FormBuilder);
+  private missionService = inject(MissionService);
+  private location = inject(Location);
 
   goBack(): void {
     this.location.back();
@@ -95,12 +89,10 @@ export class MissionCreate implements OnInit {
   loadColonies(): void {
     this.missionService.getColonies().subscribe({
       next: (colonies) => {
-        if (colonies?.length) {
-          this.colonies = colonies;
-        }
+        this.colonies = colonies ?? [];
       },
       error: () => {
-        // Endpoint non ancora disponibile sul backend: mantengo le colonie demo.
+        this.colonies = [];
       }
     });
   }

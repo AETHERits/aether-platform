@@ -1,7 +1,6 @@
 <div class="mission-container">
   <div class="missions-layout">
 
-    <!-- Barra toggle: Indietro / Inserimento / Ricerca -->
     <div class="toggle-bar">
       <button
         type="button"
@@ -25,12 +24,10 @@
       </button>
     </div>
 
-    <!-- Messaggio di successo creazione -->
     <div class="alert alert-success" *ngIf="successMessage">
       ✓ {{ successMessage }}
     </div>
 
-    <!-- Pannello di ricerca -->
     <div class="search-section" *ngIf="showSearch">
       <div class="search-row">
         <input
@@ -49,13 +46,11 @@
 
     <div class="mission-grid">
 
-      <!-- Form di inserimento (toggle) -->
       <div class="form-section" *ngIf="showForm">
         <h2>Nuova missione</h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
-      <!-- Obiettivo / Titolo -->
       <div class="field">
         <label for="title">Obiettivo / Titolo missione *</label>
         <input id="title" type="text" formControlName="title" />
@@ -67,13 +62,11 @@
         </small>
       </div>
 
-      <!-- Descrizione (opzionale) -->
       <div class="field">
         <label for="description">Descrizione</label>
         <textarea id="description" formControlName="description" rows="3"></textarea>
       </div>
 
-      <!-- Tipo missione -->
       <div class="field">
         <label for="missionType">Tipo missione *</label>
         <select id="missionType" formControlName="missionType">
@@ -85,13 +78,12 @@
         </small>
       </div>
 
-      <!-- Colonia di origine -->
       <div class="field">
         <label for="idOriginColony">Colonia di origine *</label>
         <select id="idOriginColony" formControlName="idOriginColony">
           <option [ngValue]="null" disabled selected>Seleziona colonia...</option>
-          <option *ngFor="let c of colonies" [ngValue]="c.idColony">
-            {{ c.name }} ({{ c.code }})
+          <option *ngFor="let c of colonies" [ngValue]="c.id">
+            {{ c.nome }}
           </option>
         </select>
         <small class="error" *ngIf="f['idOriginColony'].touched && f['idOriginColony'].errors?.['required']">
@@ -99,7 +91,6 @@
         </small>
       </div>
 
-      <!-- Finestra temporale -->
       <div class="field-row">
         <div class="field">
           <label for="plannedStartAt">Inizio pianificato *</label>
@@ -118,12 +109,10 @@
         </div>
       </div>
 
-      <!-- Errore di coerenza tra le due date (validator di gruppo) -->
       <small class="error" *ngIf="form.errors?.['dateRangeInvalid'] && f['plannedEndAt'].touched">
         La data di fine deve essere successiva alla data di inizio.
       </small>
 
-      <!-- Priorità e rischio -->
       <div class="field-row">
         <div class="field">
           <label for="priority">Priorità *</label>
@@ -140,7 +129,6 @@
         </div>
       </div>
 
-      <!-- Errore proveniente dal backend -->
       <div class="server-error" *ngIf="serverError">
         ⚠️ {{ serverError }}
       </div>
@@ -152,7 +140,6 @@
     </form>
   </div>
 
-  <!-- Lista delle missioni esistenti -->
   <div class="missions-list-section">
     <h3>Missioni Esistenti</h3>
     <div *ngIf="loading" class="loading">
@@ -188,7 +175,7 @@
             <td>{{ mission.title }}</td>
             <td>{{ label(typeLabels, mission.missionType) }}</td>
             <td>
-              <span class="badge" [ngClass]="'priority-' + mission.priority.toLowerCase()">
+              <span class="badge" [class]="'priority-' + mission.priority.toLowerCase()">
                 {{ label(priorityLabels, mission.priority) }}
               </span>
             </td>
@@ -204,6 +191,6 @@
     </div>
   </div>
 
-    </div><!-- /mission-grid -->
-  </div><!-- /missions-layout -->
+    </div>
+  </div>
 </div>

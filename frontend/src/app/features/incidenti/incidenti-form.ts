@@ -1,7 +1,7 @@
 import { DatePipe, CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Colonia, IncidenteCreato, Incidente, IncidentiService } from '../incidenti.service';
+import { Colonia, IncidenteCreato, Incidente, IncidentiService } from './incidenti.service';
 
 @Component({
   selector: 'app-incidenti-form',

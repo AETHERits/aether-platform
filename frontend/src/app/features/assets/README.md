@@ -19,12 +19,12 @@ Questo modulo gestisce i form e le operazioni CRUD relative agli asset nel siste
 ### Utilizzo
 
 ```typescript
-import { AssetForm } from './assets/form-asset/asset-form';
+import { AssetForm } from './features/assets/asset-form/asset-form';
 
 // Nel routing
 {
   path: 'assets',
-  loadComponent: () => import('./assets/form-asset/asset-form').then(m => m.AssetForm)
+  loadComponent: () => import('./features/assets/asset-form/asset-form').then(m => m.AssetForm)
 }
 ```
 

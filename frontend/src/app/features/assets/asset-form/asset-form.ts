@@ -4,7 +4,6 @@ import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } 
 import { finalize } from 'rxjs';
 import { AssetService } from '../services/asset.service';
 import { Asset, CreateAssetRequest } from '../models/asset.model';
-
 @Component({
   selector: 'app-asset-form',
   standalone: true,
@@ -160,7 +159,6 @@ export class AssetForm implements OnInit {
 
   deleteAsset(id: number): void {
     if (this.confirmingDelete !== id) {
-      // Primo click: chiedo conferma inline, annulla automaticamente dopo 4 secondi
       this.confirmingDelete = id;
       if (this.deleteTimer) {
         clearTimeout(this.deleteTimer);

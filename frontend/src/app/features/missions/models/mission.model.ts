@@ -6,7 +6,6 @@ export type MissionPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type MissionSafetyLevel = 'STANDARD' | 'ELEVATED' | 'HIGH_RISK' | 'CRITICAL';
 export type MissionStatus = 'DRAFT';
 
-// Il "code" NON è più qui: lo genera e assegna il backend alla creazione.
 export interface MissionCreateRequest {
   title: string;
   description?: string;
@@ -20,7 +19,6 @@ export interface MissionCreateRequest {
   safetyLevel: MissionSafetyLevel;
 }
 
-// Cosa torna indietro il backend dopo la creazione (con code e status assegnati)
 export interface MissionCreateResponse {
   idMission: number;
   code: string;
@@ -29,7 +27,6 @@ export interface MissionCreateResponse {
   createdAt: string;
 }
 
-// Risposta per il GET di tutte le missioni
 export interface MissionResponse {
   idMission: number;
   code: string;

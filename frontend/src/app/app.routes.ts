@@ -4,12 +4,12 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./home/home').then((m) => m.HomePage)
+      import('./features/home/home').then((m) => m.HomePage)
   },
   {
     path: 'incidenti/nuovo',
     loadComponent: () =>
-      import('./incidenti/form-incidenti/incidenti-form').then((m) => m.IncidentiForm)
+      import('./features/incidenti/incidenti-form').then((m) => m.IncidentiForm)
   },
   {
     path: 'missions/new',
@@ -21,7 +21,6 @@ export const routes: Routes = [
   {
     path: 'assets',
     loadComponent: () =>
-      import('./assets/form-asset/asset-form').then((m) => m.AssetForm)
+      import('./features/assets/asset-form/asset-form').then((m) => m.AssetForm)
   }
-  // altre route future: 'missions' (lista), 'missions/:id' (dettaglio), ecc.
 ];

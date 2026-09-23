@@ -3,7 +3,6 @@
 
     <h1>Gestione Asset</h1>
 
-    <!-- Barra toggle: Indietro / Inserimento / Ricerca -->
     <div class="toggle-bar">
       <button
         type="button"
@@ -27,7 +26,6 @@
       </button>
     </div>
 
-    <!-- Pannello di ricerca -->
     <div class="search-section" *ngIf="showSearch">
       <div class="search-row">
         <input
@@ -46,20 +44,16 @@
 
     <div class="assets-grid">
 
-      <!-- Form di inserimento (toggle) -->
       <div class="form-section" *ngIf="showForm">
 
-        <!-- Messaggio di successo -->
         <div *ngIf="creato" class="alert alert-success">
           {{ creato }}
         </div>
 
-        <!-- Messaggio di errore -->
         <div *ngIf="errore" class="alert alert-error">
           {{ errore }}
         </div>
 
-    <!-- Form di creazione/aggiornamento -->
     <form [formGroup]="form" (ngSubmit)="submit()" class="form">
       <div class="form-group">
         <label for="codice">Codice:</label>
@@ -117,7 +111,6 @@
     </form>
   </div>
 
-  <!-- Lista degli asset esistenti -->
   <div class="assets-list-section">
     <h2>Asset Esistenti</h2>
     <div *ngIf="loading" class="loading">
@@ -147,7 +140,7 @@
             <td>{{ asset.codice }}</td>
             <td>{{ asset.nome }}</td>
             <td>
-              <span class="badge" [ngClass]="'badge-' + asset.criticita_di_default.toLowerCase()">
+              <span class="badge" [class]="'badge-' + asset.criticita_di_default.toLowerCase()">
                 {{ label(criticitaLabels, asset.criticita_di_default) }}
               </span>
             </td>
@@ -170,6 +163,6 @@
     </div>
   </div>
 
-    </div><!-- /assets-grid -->
-  </div><!-- /assets-layout -->
+    </div>
+  </div>
 </div>

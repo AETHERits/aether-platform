@@ -1,24 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { MissionCreateRequest, MissionResponse } from '../models/mission.model';
 
 export interface ColonyOption {
-  idColony: number;
-  code: string;
-  name: string;
+  id: number;
+  nome: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class MissionService {
-  private readonly baseUrl = 'http://localhost:8080/api/missioni';
+  private http = inject(HttpClient);
+  private readonly baseUrl = `${environment.apiUrl}/missioni`;
 
-  constructor(private http: HttpClient) {}
-
-  createMission(payload: MissionCreateRequest): Observable<any> {
-    return this.http.post(this.baseUrl, payload);
+  createMission(payload: MissionCreateRequest): Observable<MissionResponse> {
+    return this.http.post<MissionResponse>(this.baseUrl, payload);
   }
 
   getMissions(): Observable<MissionResponse[]> {
@@ -30,6 +29,6 @@ export class MissionService {
   }
 
   getColonies(): Observable<ColonyOption[]> {
-    return this.http.get<ColonyOption[]>('http://localhost:8080/api/colonies');
+    return this.http.get<ColonyOption[]>(`${environment.apiUrl}/colonie`);
   }
 }

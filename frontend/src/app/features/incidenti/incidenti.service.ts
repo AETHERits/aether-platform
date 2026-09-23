@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Colonia {
   id: number;
@@ -39,7 +40,7 @@ export interface Incidente {
 @Injectable({ providedIn: 'root' })
 export class IncidentiService {
   private http = inject(HttpClient);
-  private url = 'http://localhost:8080/api';
+  private readonly url = environment.apiUrl;
 
   getColonie(): Observable<Colonia[]> {
     return this.http.get<Colonia[]>(`${this.url}/colonie`);
