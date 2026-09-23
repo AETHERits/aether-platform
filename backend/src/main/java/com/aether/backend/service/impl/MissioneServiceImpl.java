@@ -8,7 +8,7 @@ import com.aether.backend.entity.TipologiaMissione;
 import com.aether.backend.exception.ConflictException;
 import com.aether.backend.exception.ResourceNotFoundException;
 import com.aether.backend.repository.AstronautaRepository;
-import com.aether.backend.colonie.ColoniaRepository;
+import com.aether.backend.repository.ColoniaRepository;
 import com.aether.backend.repository.MissioneRepository;
 import com.aether.backend.repository.TipologiaMissioneRepository;
 import com.aether.backend.service.MissioneService;
