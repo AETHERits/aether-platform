@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name= "tipi_asset", schema="aether")
+@Table(name= "tipi_asset")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 
@@ -21,5 +21,5 @@ public class Asset {
     private String nome;
 
     @Enumerated(EnumType.STRING)
-    private Priorita criticita_di_default;
+    private CriticitaAsset criticita_di_default;
 }

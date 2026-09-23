@@ -3,11 +3,6 @@ package com.aether.backend.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * Dati modificabili di una risorsa esistente.
- * Il codice NON è incluso: assunzione di design, da confermare con il PO
- * (vedi discussione: il codice è trattato come immutabile dopo la creazione).
- */
 public class RisorsaUpdateRequest {
 
     @NotBlank(message = "Il nome è obbligatorio")

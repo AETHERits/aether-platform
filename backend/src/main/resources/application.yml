@@ -5,26 +5,29 @@ spring:
     active: dev
 
 ---
-# Profilo di Sviluppo (PostgreSQL su Supabase)
 spring:
   config:
     activate:
       on-profile: dev
   datasource:
-    # 1. Porta cambiata a 6543 (Transaction Mode) per evitare EMAXCONNSESSION
-    url: ${DB_URL:jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require}
+    url: ${DB_URL:jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require&currentSchema=aether&prepareThreshold=0}
     driver-class-name: org.postgresql.Driver
-    username: ${DB_USERNAME:postgres.uswqqwtlcpkbxydczkyr}
-    password: ${DB_PASSWORD:postgresits.}
-    # 2. Limitazione della dimensione del pool di connessioni locale
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     hikari:
       maximum-pool-size: 5
   jpa:
-    # 3. 'database-platform' rimosso: Hibernate 6 rileva il dialetto in automatico
+    properties:
+      hibernate:
+        default_schema: aether
     hibernate:
-      ddl-auto: update
-    defer-datasource-initialization: true
-    show-sql: true
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    schemas: aether
+    default-schema: aether
+    baseline-on-migrate: true
+    baseline-version: 2
 
 server:
   port: ${PORT:8080}

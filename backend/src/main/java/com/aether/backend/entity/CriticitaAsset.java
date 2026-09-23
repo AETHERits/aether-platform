@@ -1,8 +1,8 @@
 package com.aether.backend.entity;
 
-public enum Priorita {
+public enum CriticitaAsset {
     BASSA,
     MEDIA,
     ALTA,
-    CRITICA
+    VITALE
 }

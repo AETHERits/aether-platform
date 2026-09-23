@@ -21,6 +21,6 @@ public class TipologiaMissione {
     @Column(name = "id_tipologia")
     private Long id;
     
-    @Column(name = "tipo", nullable = false, unique = true)
+    @Column(name = "nome", nullable = false, unique = true)
     private String tipo;
 }

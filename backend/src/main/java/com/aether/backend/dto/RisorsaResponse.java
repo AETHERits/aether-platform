@@ -2,11 +2,6 @@ package com.aether.backend.dto;
 
 import com.aether.backend.entity.Risorsa;
 
-/**
- * Rappresentazione di una risorsa esposta dalle API.
- * Non è mai l'Entity direttamente: disaccoppia il contratto REST dal
- * modello di persistenza.
- */
 public class RisorsaResponse {
 
     private final Long idRisorsa;

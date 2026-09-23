@@ -25,9 +25,6 @@ public class RisorsaServiceImpl implements RisorsaService {
 
     @Override
     public RisorsaResponse crea(RisorsaCreateRequest request) {
-        // Acceptance Criteria: "Codice risorsa univoco" — controllo applicativo
-        // esplicito (oltre al vincolo UNIQUE a livello di database, che resta
-        // comunque la garanzia definitiva in caso di scritture concorrenti).
         if (risorsaRepository.existsByCodiceIgnoreCase(request.getCodice())) {
             throw new CodiceRisorsaDuplicatoException(request.getCodice());
         }
@@ -47,8 +44,6 @@ public class RisorsaServiceImpl implements RisorsaService {
         Risorsa risorsa = trovaEntitaOLancia(id);
         risorsa.setNome(request.getNome().trim());
         risorsa.setUnitaMisura(request.getUnitaMisura().trim());
-        // nessuna chiamata esplicita a save(): l'entity è managed nella
-        // transazione, JPA sincronizza le modifiche al commit (dirty checking).
         return RisorsaResponse.fromEntity(risorsa);
     }
 

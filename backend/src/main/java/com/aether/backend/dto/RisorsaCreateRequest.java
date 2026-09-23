@@ -3,10 +3,6 @@ package com.aether.backend.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * Dati necessari per creare una nuova risorsa.
- * Il campo "attivo" non compare qui: una risorsa nasce sempre attiva.
- */
 public class RisorsaCreateRequest {
 
     @NotBlank(message = "Il codice risorsa è obbligatorio")

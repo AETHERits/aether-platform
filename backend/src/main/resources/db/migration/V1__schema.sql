@@ -1,4 +1,9 @@
 -- ============================================================
+-- AETHER - V1: schema completo del database (PostgreSQL)
+-- Migrazione Flyway: schema creato qui, non più via ddl-auto
+-- o script manuali. Fonte unica di verità dello schema.
+-- ============================================================
+-- ============================================================
 -- AETHER - Mars Operations Platform
 -- Script SQL (PostgreSQL) - SCHEMA UNIFICATO
 --
@@ -19,9 +24,6 @@
 -- Come usarlo: eseguire questo file su un database vuoto
 -- (es. con psql -f schema.sql oppure da uno strumento come DBeaver/pgAdmin).
 -- ============================================================
-BEGIN;
-CREATE SCHEMA IF NOT EXISTS aether;
-SET search_path TO aether, public;
 CREATE EXTENSION IF NOT EXISTS btree_gist;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
@@ -953,6 +955,32 @@ CREATE INDEX ix_ruoli_permessi_ruolo ON ruoli_permessi(id_ruolo);
 -- FINE INTEGRAZIONI
 -- ============================================================
 
+-- --- 16. Tabelle di dominio gestite dai moduli backend ----------------------
+-- Sono create/gestite da Hibernate (ddl-auto=update) e documentate qui
+-- perche' questo file resta la fonte di verita' dello schema completo.
+
+-- Catalogo anagrafico risorse [modulo ORION - RisorsaController /api/risorse]
+CREATE TABLE IF NOT EXISTS risorse (
+    id_risorsa BIGSERIAL PRIMARY KEY,
+    codice VARCHAR(40) NOT NULL UNIQUE,
+    nome VARCHAR(120) NOT NULL,
+    unita_misura VARCHAR(20) NOT NULL,
+    attivo BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+-- Storico eventi del ciclo di vita incidenti [modulo HELIOS - TimelineIncidente]
+CREATE TABLE IF NOT EXISTS timeline_incidente (
+    id_evento BIGSERIAL PRIMARY KEY,
+    id_incidente BIGINT NOT NULL REFERENCES incidenti(id_incidente) ON DELETE CASCADE,
+    tipo_evento VARCHAR(50) NOT NULL CHECK (tipo_evento IN
+        ('SEGNALAZIONE','PRESA_IN_CARICO','ESCALATION','AZIONE','NOTA','CHIUSURA')),
+    descrizione TEXT NOT NULL,
+    registrato_da BIGINT NOT NULL,
+    data_evento TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS ix_timeline_incidente_incidente ON timeline_incidente(id_incidente);
+
 -- COLONIE e ASTRONAUTI si referenziano a vicenda (la colonia ha un
 -- responsabile che e' un astronauta; l'astronauta e' assegnato a una colonia).
 -- Per crearle entrambe serve aggiungere questo collegamento DOPO le due tabelle:
@@ -973,4 +1001,3 @@ FROM movimenti_risorse m
 JOIN habitat h ON h.id_habitat = m.id_habitat
 WHERE m.tipo_movimento = 'CONSUMO';
 
-COMMIT;

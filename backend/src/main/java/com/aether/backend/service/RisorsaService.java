@@ -14,12 +14,6 @@ public interface RisorsaService {
 
     RisorsaResponse trovaPerId(Long id);
 
-    /**
-     * Elenco risorse (Acceptance Criteria: "Elenco consultabile").
-     *
-     * @param soloAttive se non nullo, filtra per stato attivo/disattivo;
-     *                   se nullo, restituisce tutte le risorse.
-     */
     List<RisorsaResponse> elenca(Boolean soloAttive);
 
     RisorsaResponse attiva(Long id);
