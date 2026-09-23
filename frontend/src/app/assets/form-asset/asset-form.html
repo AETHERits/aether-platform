@@ -1,16 +1,63 @@
 <div class="asset-form-container">
-  <div class="form-section">
+  <div class="assets-layout">
+
     <h1>Gestione Asset</h1>
 
-    <!-- Messaggio di successo -->
-    <div *ngIf="creato" class="alert alert-success">
-      {{ creato }}
+    <!-- Barra toggle: Indietro / Inserimento / Ricerca -->
+    <div class="toggle-bar">
+      <button
+        type="button"
+        class="toggle-btn back-btn"
+        (click)="goBack()">
+        ← Indietro
+      </button>
+      <button
+        type="button"
+        class="toggle-btn"
+        [class.active]="showForm"
+        (click)="toggleForm()">
+        + Inserimento
+      </button>
+      <button
+        type="button"
+        class="toggle-btn"
+        [class.active]="showSearch"
+        (click)="toggleSearch()">
+        🔍 Ricerca
+      </button>
     </div>
 
-    <!-- Messaggio di errore -->
-    <div *ngIf="errore" class="alert alert-error">
-      {{ errore }}
+    <!-- Pannello di ricerca -->
+    <div class="search-section" *ngIf="showSearch">
+      <div class="search-row">
+        <input
+          id="searchTerm"
+          type="text"
+          placeholder="Cerca per codice, nome o criticità..."
+          [(ngModel)]="searchTerm" />
+        <button type="button" class="search-clear" *ngIf="searchTerm" (click)="clearSearch()">
+          ✕ Reset
+        </button>
+      </div>
+      <small class="search-hint" *ngIf="filteredAssets.length === 0 && assets.length > 0">
+        Nessun asset trovato per "{{ searchTerm }}"
+      </small>
     </div>
+
+    <div class="assets-grid">
+
+      <!-- Form di inserimento (toggle) -->
+      <div class="form-section" *ngIf="showForm">
+
+        <!-- Messaggio di successo -->
+        <div *ngIf="creato" class="alert alert-success">
+          {{ creato }}
+        </div>
+
+        <!-- Messaggio di errore -->
+        <div *ngIf="errore" class="alert alert-error">
+          {{ errore }}
+        </div>
 
     <!-- Form di creazione/aggiornamento -->
     <form [formGroup]="form" (ngSubmit)="submit()" class="form">
@@ -73,40 +120,56 @@
   <!-- Lista degli asset esistenti -->
   <div class="assets-list-section">
     <h2>Asset Esistenti</h2>
-    <div *ngIf="assets.length === 0" class="no-assets">
+    <div *ngIf="loading" class="loading">
+      Caricamento asset...
+    </div>
+    <div *ngIf="!loading && assets.length === 0" class="no-assets">
       Nessun asset disponibile
     </div>
-    <div *ngIf="assets.length > 0" class="assets-table">
+    <div *ngIf="!loading && assets.length > 0" class="assets-table">
       <table>
         <thead>
           <tr>
-            <th>Codice</th>
-            <th>Nome</th>
-            <th>Criticità Default</th>
+            <th class="sortable" (click)="sortBy('codice')">
+              Codice <span class="sort-arrow">{{ sortColumn === 'codice' ? (sortAsc ? '▲' : '▼') : '' }}</span>
+            </th>
+            <th class="sortable" (click)="sortBy('nome')">
+              Nome <span class="sort-arrow">{{ sortColumn === 'nome' ? (sortAsc ? '▲' : '▼') : '' }}</span>
+            </th>
+            <th class="sortable" (click)="sortBy('criticita_di_default')">
+              Criticità Default <span class="sort-arrow">{{ sortColumn === 'criticita_di_default' ? (sortAsc ? '▲' : '▼') : '' }}</span>
+            </th>
             <th>Azioni</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let asset of assets">
+          <tr *ngFor="let asset of filteredAssets">
             <td>{{ asset.codice }}</td>
             <td>{{ asset.nome }}</td>
             <td>
               <span class="badge" [ngClass]="'badge-' + asset.criticita_di_default.toLowerCase()">
-                {{ asset.criticita_di_default }}
+                {{ label(criticitaLabels, asset.criticita_di_default) }}
               </span>
             </td>
             <td>
               <button
                 type="button"
                 (click)="deleteAsset(asset.id_tipo_asset)"
+                [class.btn-confirm]="confirmingDelete === asset.id_tipo_asset"
                 class="btn btn-danger btn-sm"
               >
-                Elimina
+                {{ confirmingDelete === asset.id_tipo_asset ? '✕ Confermi?' : 'Elimina' }}
               </button>
             </td>
+          </tr>
+          <tr *ngIf="filteredAssets.length === 0">
+            <td colspan="4" class="no-results">Nessun risultato per la ricerca</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
+
+    </div><!-- /assets-grid -->
+  </div><!-- /assets-layout -->
 </div>

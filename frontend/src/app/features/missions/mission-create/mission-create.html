@@ -1,6 +1,57 @@
 <div class="mission-container">
-  <div class="form-section">
-    <h2>Nuova missione</h2>
+  <div class="missions-layout">
+
+    <!-- Barra toggle: Indietro / Inserimento / Ricerca -->
+    <div class="toggle-bar">
+      <button
+        type="button"
+        class="toggle-btn back-btn"
+        (click)="goBack()">
+        ← Indietro
+      </button>
+      <button
+        type="button"
+        class="toggle-btn"
+        [class.active]="showForm"
+        (click)="toggleForm()">
+        + Inserimento
+      </button>
+      <button
+        type="button"
+        class="toggle-btn"
+        [class.active]="showSearch"
+        (click)="toggleSearch()">
+        🔍 Ricerca
+      </button>
+    </div>
+
+    <!-- Messaggio di successo creazione -->
+    <div class="alert alert-success" *ngIf="successMessage">
+      ✓ {{ successMessage }}
+    </div>
+
+    <!-- Pannello di ricerca -->
+    <div class="search-section" *ngIf="showSearch">
+      <div class="search-row">
+        <input
+          id="searchTerm"
+          type="text"
+          placeholder="Cerca per codice, titolo, tipo, priorità o stato..."
+          [(ngModel)]="searchTerm" />
+        <button type="button" class="search-clear" *ngIf="searchTerm" (click)="clearSearch()">
+          ✕ Reset
+        </button>
+      </div>
+      <small class="search-hint" *ngIf="filteredMissions.length === 0 && missions.length > 0">
+        Nessuna missione trovata per "{{ searchTerm }}"
+      </small>
+    </div>
+
+    <div class="mission-grid">
+
+      <!-- Form di inserimento (toggle) -->
+      <div class="form-section" *ngIf="showForm">
+        <h2>Nuova missione</h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
@@ -27,7 +78,7 @@
         <label for="missionType">Tipo missione *</label>
         <select id="missionType" formControlName="missionType">
           <option value="" disabled selected>Seleziona...</option>
-          <option *ngFor="let t of missionTypes" [value]="t">{{ t }}</option>
+          <option *ngFor="let t of missionTypes" [value]="t">{{ label(typeLabels, t) }}</option>
         </select>
         <small class="error" *ngIf="f['missionType'].touched && f['missionType'].errors?.['required']">
           Seleziona un tipo di missione.
@@ -77,14 +128,14 @@
         <div class="field">
           <label for="priority">Priorità *</label>
           <select id="priority" formControlName="priority">
-            <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+            <option *ngFor="let p of priorities" [value]="p">{{ label(priorityLabels, p) }}</option>
           </select>
         </div>
 
         <div class="field">
           <label for="safetyLevel">Livello di rischio *</label>
           <select id="safetyLevel" formControlName="safetyLevel">
-            <option *ngFor="let s of safetyLevels" [value]="s">{{ s }}</option>
+            <option *ngFor="let s of safetyLevels" [value]="s">{{ label(safetyLabels, s) }}</option>
           </select>
         </div>
       </div>
@@ -104,36 +155,55 @@
   <!-- Lista delle missioni esistenti -->
   <div class="missions-list-section">
     <h3>Missioni Esistenti</h3>
-    <div *ngIf="missions.length === 0" class="no-data">
+    <div *ngIf="loading" class="loading">
+      Caricamento missioni...
+    </div>
+    <div *ngIf="!loading && missions.length === 0" class="no-data">
       Nessuna missione disponibile
     </div>
-    <div *ngIf="missions.length > 0" class="missions-table">
+    <div *ngIf="!loading && missions.length > 0" class="missions-table">
       <table>
         <thead>
           <tr>
-            <th>Codice</th>
-            <th>Titolo</th>
-            <th>Tipo</th>
-            <th>Priorità</th>
-            <th>Status</th>
+            <th class="sortable" (click)="sortBy('code')">
+              Codice <span class="sort-arrow">{{ sortColumn === 'code' ? (sortAsc ? '▲' : '▼') : '' }}</span>
+            </th>
+            <th class="sortable" (click)="sortBy('title')">
+              Titolo <span class="sort-arrow">{{ sortColumn === 'title' ? (sortAsc ? '▲' : '▼') : '' }}</span>
+            </th>
+            <th class="sortable" (click)="sortBy('missionType')">
+              Tipo <span class="sort-arrow">{{ sortColumn === 'missionType' ? (sortAsc ? '▲' : '▼') : '' }}</span>
+            </th>
+            <th class="sortable" (click)="sortBy('priority')">
+              Priorità <span class="sort-arrow">{{ sortColumn === 'priority' ? (sortAsc ? '▲' : '▼') : '' }}</span>
+            </th>
+            <th class="sortable" (click)="sortBy('status')">
+              Status <span class="sort-arrow">{{ sortColumn === 'status' ? (sortAsc ? '▲' : '▼') : '' }}</span>
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let mission of missions">
+          <tr *ngFor="let mission of filteredMissions">
             <td><strong>{{ mission.code }}</strong></td>
             <td>{{ mission.title }}</td>
-            <td>{{ mission.missionType }}</td>
+            <td>{{ label(typeLabels, mission.missionType) }}</td>
             <td>
               <span class="badge" [ngClass]="'priority-' + mission.priority.toLowerCase()">
-                {{ mission.priority }}
+                {{ label(priorityLabels, mission.priority) }}
               </span>
             </td>
             <td>
-              <span class="badge badge-status">{{ mission.status }}</span>
+              <span class="badge badge-status">{{ label(statusLabels, mission.status) }}</span>
             </td>
+          </tr>
+          <tr *ngIf="filteredMissions.length === 0">
+            <td colspan="5" class="no-results">Nessun risultato per la ricerca</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
+
+    </div><!-- /mission-grid -->
+  </div><!-- /missions-layout -->
 </div>
