@@ -53,65 +53,78 @@ Il progetto è **incrementale**: `Data → Backend → Frontend → Big Data →
 |---|---|
 | **Backend** | Java + Spring Boot (REST API, documentate con OpenAPI) |
 | **Frontend** | Angular (Single Page Application) |
-| **Database** | RDBMS SQL relazionale — *versione da definire (in arrivo)* |
+| **Database** | PostgreSQL (istanza gestita Supabase) |
 | **Versioning** | Git + GitHub (GitHub Flow, Pull Request obbligatorie) |
-| **CI/CD** | Pipeline di build/test automatiche (fasi successive) |
+| **CI/CD** | GitHub Actions — build/test automatiche di backend e frontend |
 | **Containerizzazione** | Docker (fase avanzata) |
 | **Evoluzioni previste** | Big Data / streaming per telemetria, sicurezza OAuth2/JWT, deployment cloud, moduli AI con human-in-the-loop |
-
-> ⚠️ La sezione Database verrà aggiornata non appena disponibile la versione utilizzata (RDBMS + versione motore).
 
 ---
 
 ## Requisiti e versioni
 
-Ambiente di sviluppo Frontend verificato:
+### Frontend
 
 | Strumento | Versione |
 |---|---|
+| Angular | 22.1.x |
 | Angular CLI | 22.1.8 |
-| Node.js | 24.18.0 |
-| npm | 11.16.0 |
-| Sistema operativo | Windows x64 |
+| TypeScript | ~6.0.2 |
+| Node.js | ≥ 22 (in CI: 22) |
+| npm | 11.12.1 |
+| Sistema operativo | multipiattaforma (Windows / macOS) |
 
-##  Backend
+### Backend — GRUPPO ARES
 
- **GRUPPO ARES**
+| Strumento | Versione |
+|---|---|
+| Java | 25 (Temurin in CI) |
+| Spring Boot | 3.5.16 |
+| Maven | 3.9.16 (via wrapper `./mvnw`) |
 
-🔹 **Java Version:** 17
-🔹 **Spring Boot Version:** 4.0.0
-🔹 **Build Tool:** Maven 3
-
-**Dipendenze:**
-- Spring Web MVC
+**Dipendenze principali** (`backend/pom.xml`):
+- Spring Web MVC (REST API)
 - Spring Data JPA
+- Spring Boot Validation
 - Spring Boot Actuator
-- H2 Database
-- Lombok
+- springdoc-openapi 2.6.0 (documentazione OpenAPI / Swagger UI)
+- PostgreSQL Driver (runtime)
+- H2 (runtime)
+- Lombok 1.18.48
 
-## Database: *da aggiungere.*
+### Database
+
+| Strumento | Versione |
+|---|---|
+| PostgreSQL | istanza gestita **Supabase** (pooler `aws-1-eu-west-1`, porta 6543 transaction mode, SSL richiesto) |
+
+- Credenziali lette dalle variabili d'ambiente `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` (vedi `backend/src/main/resources/application.yml`)
+- Schema e seed gestiti da **Flyway**: `backend/src/main/resources/db/migration/V1__schema.sql` + `V2__seed.sql` — il DB si ricostruisce da zero avviando il backend, senza script manuali
 
 ---
 
 ## Avvio rapido
-
-> Sezione da completare man mano che i moduli Backend/Frontend/DB vengono resi avviabili dal repository (obiettivo Sprint 1 — TASK-005, TASK-006).
 
 ```bash
 # Clonare il repository
 git clone <url-repo>
 cd aether-platform
 
-# Backend (Spring Boot)
-# ...comandi di build/avvio da definire...
+# Backend (Spring Boot — richiede Java 25)
+cd backend
+./mvnw spring-boot:run
+# API su http://localhost:8080 — Swagger UI su /swagger-ui/index.html
 
-# Frontend (Angular)
+# Frontend (Angular — richiede Node.js >= 22)
 cd frontend
 npm install
-ng serve
+npm start
+# App su http://localhost:4200
 
 # Database
-# ...script/migrazioni da definire...
+# Schema e seed sono applicati automaticamente da Flyway all'avvio del backend
+# (nessuno script manuale: migrations in backend/src/main/resources/db/migration)
+# Le credenziali vanno fornite tramite DB_URL / DB_USERNAME / DB_PASSWORD
 ```
 
 Criteri di accettazione del cliente per questa sezione:
@@ -272,16 +285,23 @@ Evoluzioni successive previste dal capitolato: Big Data/telemetria a scala, sicu
 
 ## Documentazione del repository
 
-- `01_PROJECT_AETHER_DOCUMENTO_GENERALE` — capitolato e requisiti completi
-- `02_CLASS_OPERATING_MODEL` — modello operativo e ruoli
-- `03_BOARD_RULES` — regole della Scrum Board
-- `04_GIT_AND_PR_WORKFLOW` — workflow Git e Pull Request
-- `05_CEREMONIES` — cerimonie Scrum
-- `06_DEFINITION_OF_READY_DONE` — DoR/DoD
-- `07_SPRINT_GOALS` — obiettivi dei tre Sprint
-- `0X_SPRINT_N_STUDENTI_MISSION_PACK` — backlog e Acceptance Criteria per Sprint
-- `aether_backlog.csv` / `aether_backlog.json` — backlog strutturato (Epic/Task/Story per squad e sprint)
+### `docs/agile/`
+- `CEREMONIES.md` — cerimonie Scrum
+- `DEFINITION_OF_READY_DONE.md` — DoR/DoD
+- `GIT_WORKFLOW.md` — workflow Git e Pull Request
+
+### `docs/database/`
+- `AETHER_Modello_ER.md` / `DB_Modello_ER.docx` — modello E-R e schema logico
+- `05_AETHER_seed.sql` — dataset demo (seed)
+
+### `docs/onboarding/`
+- `DAY1_STUDENT_KICKOFF.md` — kick-off studenti
+
+### Sprint
+- `docs/sprint-1/README.md` — goal e backlog Sprint 1
+- `docs/sprint-2/README.md` — goal e backlog Sprint 2
+- `docs/sprint-3/AETHER_Sprint3_Student_Mission_Pack.docx` — mission pack Sprint 3
 
 ---
 
-*README in evoluzione: verrà aggiornato con versione del database, istruzioni di setup complete e dettagli architetturali man mano che il progetto procede.*
+*README in evoluzione: verrà aggiornato con istruzioni di setup complete e dettagli architetturali man mano che il progetto procede.*
