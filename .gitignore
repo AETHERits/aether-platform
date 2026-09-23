@@ -1,1 +1,18 @@
-.idea
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.history/
+
+# Logs
+*.log
+logs/
+
+# Env
+.env
+.env.local
+*.env
