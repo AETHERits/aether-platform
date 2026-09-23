@@ -4,10 +4,11 @@ import com.aether.backend.dto.CreaMissioneRequest;
 import com.aether.backend.dto.MissioneResponse;
 import com.aether.backend.entity.Missione;
 import com.aether.backend.entity.StatoMissione;
+import com.aether.backend.entity.TipologiaMissione;
 import com.aether.backend.exception.ConflictException;
 import com.aether.backend.exception.ResourceNotFoundException;
 import com.aether.backend.repository.AstronautaRepository;
-import com.aether.backend.colonie.ColoniaRepository;
+import com.aether.backend.repository.ColoniaRepository;
 import com.aether.backend.repository.MissioneRepository;
 import com.aether.backend.repository.TipologiaMissioneRepository;
 import com.aether.backend.service.MissioneService;
@@ -79,13 +80,19 @@ public class MissioneServiceImpl implements MissioneService {
         missione.setUltimaModifica(adesso);
 
         Missione salvata = missioneRepository.save(missione);
-        return MissioneResponse.from(salvata);
+        TipologiaMissione tipologia = tipologiaMissioneRepository.findById(salvata.getIdTipologia())
+                .orElse(null);
+        return MissioneResponse.from(salvata, tipologia);
     }
 
     @Override
     public List<MissioneResponse> getAll() {
         return missioneRepository.findAll().stream()
-                .map(MissioneResponse::from)
+                .map(missione -> {
+                    TipologiaMissione tipologia = tipologiaMissioneRepository.findById(missione.getIdTipologia())
+                            .orElse(null);
+                    return MissioneResponse.from(missione, tipologia);
+                })
                 .toList();
     }
 
@@ -93,6 +100,8 @@ public class MissioneServiceImpl implements MissioneService {
     public MissioneResponse getById(Long id) {
         Missione missione = missioneRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Nessuna missione trovata con id " + id));
-        return MissioneResponse.from(missione);
+        TipologiaMissione tipologia = tipologiaMissioneRepository.findById(missione.getIdTipologia())
+                .orElse(null);
+        return MissioneResponse.from(missione, tipologia);
     }
 }

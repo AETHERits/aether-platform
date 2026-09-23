@@ -1,7 +1,9 @@
-package com.aether.backend.incidenti;
+package com.aether.backend.controller;
 
-import com.aether.backend.colonie.Colonia;
-import com.aether.backend.colonie.ColoniaRepository;
+import com.aether.backend.entity.Colonia;
+import com.aether.backend.entity.Incidente;
+import com.aether.backend.service.impl.IncidenteService;
+import com.aether.backend.repository.ColoniaRepository;
 import com.aether.backend.dto.NuovoIncidenteRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -60,5 +62,13 @@ public class IncidenteController {
         return ResponseEntity
                 .created(URI.create("/api/incidenti/" + creato.getId()))
                 .body(creato);
+    }
+
+    /**
+     * Recupera l'elenco di tutti gli incidenti.
+     */
+    @GetMapping("/incidenti")
+    public ResponseEntity<List<Incidente>> getAll() {
+        return ResponseEntity.ok(service.ottieniTutti());
     }
 }

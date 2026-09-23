@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MissionCreateRequest } from '../models/mission.model';
+import { MissionCreateRequest, MissionResponse } from '../models/mission.model';
 
 export interface ColonyOption {
   idColony: number;
@@ -13,7 +13,7 @@ export interface ColonyOption {
   providedIn: 'root'
 })
 export class MissionService {
-  private readonly baseUrl = '/api/missions';
+  private readonly baseUrl = 'http://localhost:8080/api/missioni';
 
   constructor(private http: HttpClient) {}
 
@@ -21,9 +21,15 @@ export class MissionService {
     return this.http.post(this.baseUrl, payload);
   }
 
-  // Non ancora collegato: per ora il component userà dati mock.
-  // Quando il backend espone l'endpoint, questo metodo è già pronto.
+  getMissions(): Observable<MissionResponse[]> {
+    return this.http.get<MissionResponse[]>(this.baseUrl);
+  }
+
+  getMissionById(id: number): Observable<MissionResponse> {
+    return this.http.get<MissionResponse>(`${this.baseUrl}/${id}`);
+  }
+
   getColonies(): Observable<ColonyOption[]> {
-    return this.http.get<ColonyOption[]>('/api/colonies');
+    return this.http.get<ColonyOption[]>('http://localhost:8080/api/colonies');
   }
 }

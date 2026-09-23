@@ -1,12 +1,13 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Colonia, IncidenteCreato, IncidentiService } from '../incidenti.service';
+import { Colonia, IncidenteCreato, Incidente, IncidentiService } from '../incidenti.service';
 
 @Component({
   selector: 'app-incidenti-form',
-  imports: [ReactiveFormsModule, DatePipe],
-  templateUrl: './incidenti-form.html'
+  imports: [ReactiveFormsModule, DatePipe, CommonModule],
+  templateUrl: './incidenti-form.html',
+  styleUrl: './incidenti-form.scss'
 })
 export class IncidentiForm implements OnInit {
   private fb = inject(NonNullableFormBuilder);
@@ -21,10 +22,21 @@ export class IncidentiForm implements OnInit {
 
   severitaOptions = ['BASSA', 'MEDIA', 'ALTA', 'CRITICA'];
   colonie: Colonia[] = [];
+  incidenti: Incidente[] = [];
   creato: IncidenteCreato | null = null;
 
   ngOnInit(): void {
     this.service.getColonie().subscribe(c => (this.colonie = c));
+    this.loadIncidenti();
+  }
+
+  loadIncidenti(): void {
+    this.service.getIncidenti().subscribe({
+      next: (inc) => {
+        this.incidenti = inc;
+      },
+      error: (e) => console.error('Errore caricamento incidenti', e)
+    });
   }
 
   submit(): void {
@@ -43,6 +55,7 @@ export class IncidentiForm implements OnInit {
       next: ris => {
         this.creato = ris;
         this.form.reset();
+        this.loadIncidenti();
       },
       error: e => console.error('Errore API', e)
     });

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { MissionService, ColonyOption } from '../services/mission';
-import { MissionCreateRequest } from '../models/mission.model';
+import { MissionCreateRequest, MissionResponse } from '../models/mission.model';
 import { dateRangeValidator } from '../validators/mission.validators';
 
 @Component({
@@ -23,6 +23,8 @@ export class MissionCreate implements OnInit {
     { idColony: 2, code: 'VALLES-RO', name: 'Valles Research Outpost' },
     { idColony: 3, code: 'ELYSIUM-RELAY', name: 'Elysium Relay' }
   ];
+
+  missions: MissionResponse[] = [];
 
   readonly missionTypes = [
     'INTERNAL', 'EVA', 'SCIENCE', 'LOGISTICS',
@@ -52,6 +54,18 @@ export class MissionCreate implements OnInit {
       },
       { validators: dateRangeValidator('plannedStartAt', 'plannedEndAt') }
     );
+    this.loadMissions();
+  }
+
+  loadMissions(): void {
+    this.missionService.getMissions().subscribe({
+      next: (missions) => {
+        this.missions = missions;
+      },
+      error: (err) => {
+        console.error('Errore caricamento missioni', err);
+      }
+    });
   }
 
   get f() {
@@ -79,6 +93,11 @@ export class MissionCreate implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Missione creata:', response);
+          this.form.reset({
+            priority: 'MEDIUM',
+            safetyLevel: 'STANDARD'
+          });
+          this.loadMissions();
         },
         error: (err) => {
           if (err.status === 409) {

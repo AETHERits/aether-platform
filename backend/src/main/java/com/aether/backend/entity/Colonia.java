@@ -1,4 +1,4 @@
-package com.aether.backend.colonie;
+package com.aether.backend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

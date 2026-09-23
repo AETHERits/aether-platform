@@ -25,6 +25,17 @@ export interface IncidenteCreato {
   registratoIl: string;
 }
 
+export interface Incidente {
+  id: number;
+  codice: string;
+  idColonia: number;
+  titolo: string;
+  descrizione: string;
+  severita: string;
+  stato: string;
+  registratoIl: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class IncidentiService {
   private http = inject(HttpClient);
@@ -36,5 +47,9 @@ export class IncidentiService {
 
   creaIncidente(dto: NuovoIncidente): Observable<IncidenteCreato> {
     return this.http.post<IncidenteCreato>(`${this.url}/incidenti`, dto);
+  }
+
+  getIncidenti(): Observable<Incidente[]> {
+    return this.http.get<Incidente[]>(`${this.url}/incidenti`);
   }
 }

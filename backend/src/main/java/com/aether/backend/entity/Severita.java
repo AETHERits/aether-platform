@@ -1,4 +1,4 @@
-package com.aether.backend.incidenti;
+package com.aether.backend.entity;
 
 /**
  * Severità di un incidente operativo.

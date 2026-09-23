@@ -3,13 +3,8 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'missions/new',
-    pathMatch: 'full'
-  },
-  {
-    path: '',
-    redirectTo: 'incidenti/nuovo',
-    pathMatch: 'full'
+    loadComponent: () =>
+      import('./home/home').then((m) => m.HomePage)
   },
   {
     path: 'incidenti/nuovo',
@@ -22,6 +17,11 @@ export const routes: Routes = [
       import('./features/missions/mission-create/mission-create').then(
         (m) => m.MissionCreate
       )
+  },
+  {
+    path: 'assets',
+    loadComponent: () =>
+      import('./assets/form-asset/asset-form').then((m) => m.AssetForm)
   }
   // altre route future: 'missions' (lista), 'missions/:id' (dettaglio), ecc.
 ];

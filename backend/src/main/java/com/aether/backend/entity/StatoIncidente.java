@@ -1,4 +1,4 @@
-package com.aether.backend.incidenti;
+package com.aether.backend.entity;
 
 /**
  * Stati del ciclo di vita di un incidente.

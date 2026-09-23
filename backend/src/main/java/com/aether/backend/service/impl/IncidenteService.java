@@ -1,12 +1,16 @@
-package com.aether.backend.incidenti;
+package com.aether.backend.service.impl;
 
 import com.aether.backend.dto.NuovoIncidenteRequest;
+import com.aether.backend.entity.Incidente;
+import com.aether.backend.entity.StatoIncidente;
+import com.aether.backend.repository.IncidenteRepository;
 import com.aether.backend.timeline.TimelineIncidente;
 import com.aether.backend.timeline.TimelineIncidenteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * Logica di business della registrazione incidente.
@@ -77,5 +81,12 @@ public class IncidenteService {
      */
     private String generaCodice() {
         return "INC-" + String.format("%03d", incidenti.count() + 1);
+    }
+
+    /**
+     * Recupera l'elenco di tutti gli incidenti.
+     */
+    public List<Incidente> ottieniTutti() {
+        return incidenti.findAll();
     }
 }

@@ -1,5 +1,6 @@
-package com.aether.backend.colonie;
+package com.aether.backend.repository;
 
+import com.aether.backend.entity.Colonia;
 import org.springframework.data.jpa.repository      .JpaRepository;
 
 /**

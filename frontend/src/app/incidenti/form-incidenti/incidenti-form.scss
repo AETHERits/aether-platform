@@ -1,4 +1,4 @@
-.mission-container {
+.incidenti-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
@@ -12,11 +12,12 @@
 }
 
 .form-section,
-.missions-list-section {
+.incidenti-list-section {
   background: #ffffff;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 
   h2, h3 {
     margin-top: 0;
@@ -33,68 +34,70 @@
   }
 }
 
-.field {
+form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 18px;
+  gap: 1rem;
 
   label {
-    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
     font-weight: 600;
     color: #333;
-    margin-bottom: 6px;
-  }
 
-  input,
-  select,
-  textarea {
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: inherit;
-    transition: border-color 0.15s ease;
+    input,
+    select,
+    textarea {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.15s ease;
 
-    &:focus {
-      outline: none;
-      border-color: #4a6cf7;
-      box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+      &:focus {
+        outline: none;
+        border-color: #4a6cf7;
+        box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
     }
   }
-
-  textarea {
-    resize: vertical;
-  }
 }
 
-.field-row {
-  display: flex;
-  gap: 16px;
-
-  .field {
-    flex: 1;
-  }
-}
-
-.error {
+.errore {
   color: #d33;
   font-size: 0.8rem;
-  margin-top: 4px;
+  margin-top: 0.25rem;
 }
 
-.server-error {
-  background: #ffecec;
-  color: #c0392b;
-  padding: 12px 14px;
+.info {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 1rem;
   border-radius: 6px;
   font-size: 0.9rem;
-  margin: 16px 0;
-  border: 1px solid #f5b7b1;
+  margin: 1rem 0;
+  border-left: 4px solid #1565c0;
+}
+
+.ok {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-left: 4px solid #2e7d32;
 }
 
 button[type="submit"] {
-  width: 100%;
-  padding: 12px;
+  padding: 0.75rem 1.5rem;
   background: #4a6cf7;
   color: white;
   border: none;
@@ -122,7 +125,7 @@ button[type="submit"] {
   border-radius: 6px;
 }
 
-.missions-table {
+.incidenti-table {
   overflow-x: auto;
 
   table {
@@ -169,22 +172,22 @@ button[type="submit"] {
   font-size: 0.8rem;
   font-weight: 600;
 
-  &.priority-low {
+  &.severity-bassa {
     background-color: #e3f2fd;
     color: #1565c0;
   }
 
-  &.priority-medium {
+  &.severity-media {
     background-color: #fff3e0;
     color: #e65100;
   }
 
-  &.priority-high {
+  &.severity-alta {
     background-color: #fce4ec;
     color: #c2185b;
   }
 
-  &.priority-critical {
+  &.severity-critica {
     background-color: #ffebee;
     color: #b71c1c;
   }

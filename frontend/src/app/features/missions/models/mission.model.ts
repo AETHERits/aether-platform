@@ -28,3 +28,21 @@ export interface MissionCreateResponse {
   title: string;
   createdAt: string;
 }
+
+// Risposta per il GET di tutte le missioni
+export interface MissionResponse {
+  idMission: number;
+  code: string;
+  status: MissionStatus;
+  title: string;
+  description?: string;
+  missionType: MissionType;
+  idOriginColony: number;
+  idDestinationColony?: number;
+  destinationName?: string;
+  plannedStartAt: string;
+  plannedEndAt: string;
+  priority: MissionPriority;
+  safetyLevel: MissionSafetyLevel;
+  createdAt: string;
+}

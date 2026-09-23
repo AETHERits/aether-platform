@@ -1,6 +1,6 @@
 package com.aether.backend.dto;
 
-import com.aether.backend.incidenti.Severita;
+import com.aether.backend.entity.Severita;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
