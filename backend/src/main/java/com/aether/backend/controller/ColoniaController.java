@@ -2,50 +2,67 @@ package com.aether.backend.controller;
 
 import com.aether.backend.dto.ColoniaResponse;
 import com.aether.backend.service.ColoniaService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-    /**
-     * REST Controller per la gestione e la consultazione delle basi marziane (ARES-101).
-     */
-    @RestController
-    @RequestMapping("/api/v1/colonie")
-    @RequiredArgsConstructor
-    @Tag(name = "Colonie", description = "API per la gestione delle basi e colonie marziane gestite da ARES")
-    public class ColoniaController {
 
-        private final ColoniaService  coloniaService;
+@RestController
+@RequestMapping("/api/colonie")
+public class ColoniaController {
 
-        /**
-         * Recupera l'elenco completo delle basi marziane registrate.
-         *
-         * @return ResponseEntity contenente la lista di ColonyResponseDto e status HTTP 200 OK.
-         */
-        @Operation(
-                summary = "Recupera l'elenco delle basi marziane",
-                description = "Restituisce tutte le basi marziane non cancellate logicamente. Ogni base include codice, nome e stato operativo."
-        )
-        @ApiResponse(
-                responseCode = "200",
-                description = "Elenco recuperato con successo (può essere un array vuoto [] se non ci sono basi)",
-                content = @Content(
-                        mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = ColoniaResponse.class))
-                )
-        )
-        @GetMapping
-        public ResponseEntity<List<ColoniaResponse>> getAllColonie() {
-            List<ColoniaResponse> colonie = coloniaService.findAll();
-            return ResponseEntity.ok(colonie);
-        }
+    private final ColoniaService coloniaService;
+
+    public ColoniaController(ColoniaService coloniaService) {
+        this.coloniaService = coloniaService;
     }
+
+    // GET /api/colonie - Retrieve all non-deleted colonies
+    @GetMapping
+    public ResponseEntity<List<ColoniaResponse>> getAllColonie() {
+        List<ColoniaResponse> colonie = coloniaService.findAll();
+        return ResponseEntity.ok(colonie);
+    }
+
+    // GET /api/colonie/{id} - Retrieve a specific colony by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ColoniaResponse> getColoniaById(@PathVariable Long id) {
+        ColoniaResponse colonia = coloniaService.findById(id);
+        return ResponseEntity.ok(colonia);
+    }
+
+    // POST /api/colonie - Create a new colony
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MISSION_CONTROLLER')")
+    public ResponseEntity<ColoniaResponse> createColonia(@Valid @RequestBody ColoniaResponse dto) {
+        ColoniaResponse created = coloniaService.create(dto);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    // PUT /api/colonie/{id} - Full update of an existing colony
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COLONY_COMMANDER')")
+    public ResponseEntity<ColoniaResponse> updateColonia(@PathVariable Long id, @Valid @RequestBody ColoniaResponse dto) {
+        ColoniaResponse updated = coloniaService.update(id, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    // PATCH /api/colonie/{id} - Partial update of an existing colony (@Valid is omitted to allow partial payloads)
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COLONY_COMMANDER')")
+    public ResponseEntity<ColoniaResponse> patchColonia(@PathVariable Long id, @RequestBody ColoniaResponse dto) {
+        ColoniaResponse patched = coloniaService.patch(id, dto);
+        return ResponseEntity.ok(patched);
+    }
+
+    // DELETE /api/colonie/{id} - Soft delete a colony (BR-010)
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteColonia(@PathVariable Long id) {
+        coloniaService.deleteOrDeactivate(id);
+        return ResponseEntity.noContent().build();
+    }
+}

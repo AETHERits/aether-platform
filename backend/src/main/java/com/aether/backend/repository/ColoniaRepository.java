@@ -2,15 +2,15 @@ package com.aether.backend.repository;
 
 import com.aether.backend.entity.Colonia;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
+import java.util.Optional;
 
-import java.util.Collection;
-
-/**
- * Accesso dati alla tabella "colonie".
- * Per questa feature si usa solo findAll() (select del form):
- * il repository esiste per completare il pattern, non per scritture.
- */
+@Repository
 public interface ColoniaRepository extends JpaRepository<Colonia, Long> {
     List<Colonia> findByCancellatoFalse();
+    boolean existsByCodice(String codice);
+    boolean existsByCodiceAndIdNot(String codice, Long id);
+    Optional<Colonia> findByCodice(String codice);
 }
