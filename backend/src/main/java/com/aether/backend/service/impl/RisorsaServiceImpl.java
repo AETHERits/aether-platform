@@ -4,8 +4,8 @@ import com.aether.backend.dto.RisorsaCreateRequest;
 import com.aether.backend.dto.RisorsaResponse;
 import com.aether.backend.dto.RisorsaUpdateRequest;
 import com.aether.backend.entity.Risorsa;
-import com.aether.backend.exception.CodiceRisorsaDuplicatoException;
-import com.aether.backend.exception.RisorsaNonTrovataException;
+import com.aether.backend.exception.DuplicateResourceCodeException;
+import com.aether.backend.exception.ResourceNotFoundException;
 import com.aether.backend.repository.RisorsaRepository;
 import com.aether.backend.service.RisorsaService;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class RisorsaServiceImpl implements RisorsaService {
     @Override
     public RisorsaResponse crea(RisorsaCreateRequest request) {
         if (risorsaRepository.existsByCodiceIgnoreCase(request.getCodice())) {
-            throw new CodiceRisorsaDuplicatoException(request.getCodice());
+            throw new DuplicateResourceCodeException(request.getCodice());
         }
 
         Risorsa risorsa = new Risorsa(
@@ -81,6 +81,6 @@ public class RisorsaServiceImpl implements RisorsaService {
 
     private Risorsa trovaEntitaOLancia(Long id) {
         return risorsaRepository.findById(id)
-                .orElseThrow(() -> new RisorsaNonTrovataException(id));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 }

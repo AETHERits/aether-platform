@@ -31,7 +31,7 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public AssetDTO getAssetById(Long id) {
         Asset asset = assetRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset non trovato con id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         return assetMapper.toDTO(asset);
     }

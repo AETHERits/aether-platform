@@ -1,13 +1,6 @@
 package com.aether.backend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -67,4 +60,20 @@ public class Missione {
 
     @Column(name = "ultima_modifica", nullable = false)
     private OffsetDateTime ultimaModifica;
+
+    /** Valorizza i timestamp alla prima persistenza: il service non deve piu' occuparsene. */
+    @PrePersist
+    void prePersist() {
+        OffsetDateTime adesso = OffsetDateTime.now();
+        if (dataCreazione == null) {
+            dataCreazione = adesso;
+        }
+        ultimaModifica = adesso;
+    }
+
+    /** Aggiorna automaticamente ultima_modifica a ogni UPDATE (modifica dati o cambio stato). */
+    @PreUpdate
+    void preUpdate() {
+        ultimaModifica = OffsetDateTime.now();
+    }
 }
