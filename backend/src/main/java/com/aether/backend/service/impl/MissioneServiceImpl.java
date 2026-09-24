@@ -6,7 +6,6 @@ import com.aether.backend.dto.MissioneResponse;
 import com.aether.backend.entity.Missione;
 import com.aether.backend.entity.StatoMissione;
 import com.aether.backend.entity.TipologiaMissione;
-import com.aether.backend.exception.BadRequestException;
 import com.aether.backend.exception.ConflictException;
 import com.aether.backend.exception.ResourceNotFoundException;
 import com.aether.backend.repository.AstronautaRepository;
@@ -173,7 +172,7 @@ public class MissioneServiceImpl implements MissioneService {
             throw new ResourceNotFoundException(r.getIdResponsabile());
         }
         if (!r.getDataFinePrevista().isAfter(r.getDataInizioPrevista())) {
-            throw new BadRequestException(
+            throw new IllegalArgumentException(
                     "La data di fine prevista deve essere successiva alla data di inizio prevista");
         }
     }
