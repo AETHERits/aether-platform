@@ -2,7 +2,9 @@ package com.aether.backend.mapper;
 
 import com.aether.backend.dto.ColoniaResponse;
 import com.aether.backend.entity.Colonia;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ColoniaMapper {
 
     public static ColoniaResponse toDTO(Colonia entity) {

@@ -1,7 +1,10 @@
 package com.aether.backend.repository;
 
 import com.aether.backend.entity.Colonia;
-import org.springframework.data.jpa.repository      .JpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+import java.util.Collection;
 
 /**
  * Accesso dati alla tabella "colonie".
@@ -9,4 +12,5 @@ import org.springframework.data.jpa.repository      .JpaRepository;
  * il repository esiste per completare il pattern, non per scritture.
  */
 public interface ColoniaRepository extends JpaRepository<Colonia, Long> {
+    List<Colonia> findByCancellatoFalse();
 }
