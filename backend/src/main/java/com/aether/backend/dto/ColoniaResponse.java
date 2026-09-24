@@ -1,6 +1,9 @@
 package com.aether.backend.dto;
 
 import com.aether.backend.entity.StatoOperativoColonia;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
