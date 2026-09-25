@@ -122,8 +122,9 @@ npm start
 # App su http://localhost:4200
 
 # Database
-# Schema e seed sono applicati automaticamente da Flyway all'avvio del backend
-# (nessuno script manuale: migrations in backend/src/main/resources/db/migration)
+# Lo schema viene creato/aggiornato automaticamente da Hibernate all'avvio del backend
+# (ddl-auto: update, configurato in backend/src/main/resources/application.yml)
+# Lo schema SQL completo di progetto e il dataset demo sono documentati in docs/sql/
 # Le credenziali vanno fornite tramite DB_URL / DB_USERNAME / DB_PASSWORD
 ```
 

@@ -8,12 +8,7 @@ spring:
     password: ""
   jpa:
     hibernate:
-      # Nei test lo schema H2 viene generato dalle entity (le migration
-      # V1/V2 sono in dialetto PostgreSQL e non girano su H2)
       ddl-auto: update
-  # Flyway disattivato sui test: si attivera' solo in dev/produzione
-  flyway:
-    enabled: false
 
 server:
   port: 0

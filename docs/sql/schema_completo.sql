@@ -34,9 +34,6 @@ CREATE TABLE tipi_asset (
     criticita_di_default VARCHAR(20) CHECK (criticita_di_default IN ('BASSA','MEDIA','ALTA','VITALE')),
     UNIQUE (codice)
 );
-ALTER TABLE aether.tipi_asset
-DROP COLUMN IF EXISTS id,
-DROP COLUMN IF EXISTS priority;
 
 CREATE TABLE categorie_risorsa (
     id_categoria_risorsa SERIAL PRIMARY KEY,

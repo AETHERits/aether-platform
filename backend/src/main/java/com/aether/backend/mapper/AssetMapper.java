@@ -4,10 +4,6 @@ import com.aether.backend.dto.AssetDTO;
 import com.aether.backend.entity.TipoAsset;
 import org.springframework.stereotype.Component;
 
-/**
- * Il modulo frontend "assets" gestisce il catalogo tipi_asset (codice, nome, criticita di default),
- * non gli asset tecnici fisici (tabella asset_tecnici / entity Asset).
- */
 @Component
 public class AssetMapper {
 

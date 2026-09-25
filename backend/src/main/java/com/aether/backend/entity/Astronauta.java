@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Astronauta extends Auditable {
 
-    // id_astronauta e' BIGSERIAL -> Long
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_astronauta")
@@ -35,7 +34,6 @@ public class Astronauta extends Auditable {
     @Column(nullable = false, length = 50)
     private String mansione;
 
-    // N:1 -> colonie (un astronauta e' assegnato a una colonia, opzionale)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_colonia")
     private Colonia colonia;

@@ -12,18 +12,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Habitat extends Auditable {
 
-    // id_habitat e' SERIAL (int4) -> Integer
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_habitat")
     private Integer id;
 
-    // N:1 -> colonie
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_colonia", nullable = false)
     private Colonia colonia;
 
-    // relazione ricorsiva: un habitat puo' contenere altri habitat
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_habitat_padre")
     private Habitat habitatPadre;

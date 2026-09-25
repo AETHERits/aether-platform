@@ -46,8 +46,6 @@ public class MissioneServiceImpl implements MissioneService {
         this.astronautaRepository = astronautaRepository;
     }
 
-    // ------------------------------------------------------------------ CREATE
-
     @Override
     @Transactional
     public MissioneResponse creaBozza(CreaMissioneRequest request) {
@@ -64,22 +62,13 @@ public class MissioneServiceImpl implements MissioneService {
         applicaDati(missione, request);
         missione.setStato(StatoMissione.DRAFT);
 
-        // Con IDENTITY l'INSERT parte subito: un eventuale codice duplicato (race condition)
-        // solleva DataIntegrityViolationException qui, gestita come 409 dall'handler.
         Missione salvata = missioneRepository.save(missione);
         return toResponse(salvata);
     }
 
-    // -------------------------------------------------------------------- READ
-
     @Override
     @Transactional(readOnly = true)
     public List<MissioneResponse> getAll() {
-        // La tipologia e' gia' caricata insieme alla missione tramite la relazione
-        // @ManyToOne (LAZY, ma qui siamo dentro la transazione): niente piu' bisogno
-        // di una query separata per evitare N+1 "a mano", la fa Hibernate.
-        // Se il numero di missioni cresce, valuta @EntityGraph(attributePaths = "tipologia")
-        // sul repository per forzare un unico JOIN invece di N query lazy.
         List<Missione> missioni = missioneRepository.findAll(Sort.by("id"));
         return missioni.stream()
                 .map(this::toResponse)
@@ -91,8 +80,6 @@ public class MissioneServiceImpl implements MissioneService {
     public MissioneResponse getById(Long id) {
         return toResponse(trovaMissione(id));
     }
-
-    // ------------------------------------------------------------------ UPDATE
 
     @Override
     @Transactional
@@ -116,9 +103,6 @@ public class MissioneServiceImpl implements MissioneService {
 
         applicaDati(missione, request);
 
-        // saveAndFlush: l'UPDATE parte ora, cosi' un'eventuale violazione di vincolo
-        // viene tradotta correttamente in 409 invece di esplodere al commit.
-        // ultima_modifica e' aggiornata da @PreUpdate (in Auditable).
         return toResponse(missioneRepository.saveAndFlush(missione));
     }
 
@@ -142,8 +126,6 @@ public class MissioneServiceImpl implements MissioneService {
         return toResponse(missioneRepository.saveAndFlush(missione));
     }
 
-    // ------------------------------------------------------------------ DELETE
-
     @Override
     @Transactional
     public void elimina(Long id) {
@@ -156,8 +138,6 @@ public class MissioneServiceImpl implements MissioneService {
         missioneRepository.delete(missione);
     }
 
-    // ----------------------------------------------------------------- helpers
-
     private Missione trovaMissione(Long id) {
         return missioneRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id));
@@ -167,7 +147,6 @@ public class MissioneServiceImpl implements MissioneService {
         return new ConflictException("Esiste gia' una missione con codice '" + codice + "'");
     }
 
-    /** Validazione condivisa da creazione e modifica (AggiornaMissioneRequest estende CreaMissioneRequest). */
     private void validaPeriodo(CreaMissioneRequest r) {
         if (!r.getDataFinePrevista().isAfter(r.getDataInizioPrevista())) {
             throw new IllegalArgumentException(
@@ -175,13 +154,6 @@ public class MissioneServiceImpl implements MissioneService {
         }
     }
 
-    /**
-     * Copia i dati modificabili dalla request all'entita' (stato e timestamp esclusi).
-     * Qui, e non piu' in un metodo di validazione separato, si carica ogni relazione:
-     * se l'id non esiste, findById lancia ResourceNotFoundException e la transazione
-     * va in rollback, quindi il comportamento verso il chiamante e' identico a prima
-     * (404 se colonia/tipologia/responsabile non esistono).
-     */
     private void applicaDati(Missione missione, CreaMissioneRequest r) {
         Colonia colonia = coloniaRepository.findById(r.getIdColonia())
                 .orElseThrow(() -> new ResourceNotFoundException(r.getIdColonia()));
@@ -237,8 +209,6 @@ public class MissioneServiceImpl implements MissioneService {
     }
 
     private MissioneResponse toResponse(Missione missione) {
-        // missione.getTipologia() e' gia' l'oggetto TipologiaMissione: nessuna query aggiuntiva
-        // da scrivere qui (a differenza di prima, che ripescava la tipologia dal repository).
         return MissioneResponse.from(missione, missione.getTipologia());
     }
 }

@@ -3,19 +3,6 @@ package com.aether.backend.entity;
 import java.util.EnumSet;
 import java.util.Set;
 
-/**
- * Stati del ciclo di vita di una missione, con le transizioni consentite.
- *
- * <pre>
- * DRAFT ──► PLANNED ──► APPROVED ──► IN_PROGRESS ──► COMPLETED
- *   ▲          │                       │    ▲
- *   └──────────┘                       ▼    │
- *                                   SUSPENDED
- *
- * CANCELLED raggiungibile da tutti gli stati non finali.
- * COMPLETED e CANCELLED sono stati finali.
- * </pre>
- */
 public enum StatoMissione {
     DRAFT,
     PLANNED,

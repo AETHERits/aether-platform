@@ -14,7 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TipologiaMissione {
 
-    // id_tipologia e' SERIAL (int4) -> Integer
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tipologia")

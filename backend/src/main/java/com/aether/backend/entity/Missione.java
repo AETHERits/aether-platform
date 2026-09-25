@@ -28,12 +28,10 @@ public class Missione extends Auditable {
     @Column(name = "descrizione")
     private String descrizione;
 
-    // N:1 -> colonie
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_colonia", nullable = false)
     private Colonia colonia;
 
-    // N:1 -> tipologie_missione
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_tipologia", nullable = false)
     private TipologiaMissione tipologia;
@@ -56,12 +54,10 @@ public class Missione extends Auditable {
     @Column(name = "stato", nullable = false, length = 20)
     private StatoMissione stato;
 
-    // N:1 -> astronauti (responsabile della missione)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_responsabile", nullable = false)
     private Astronauta responsabile;
 
-    // N:1 -> utenti (chi ha approvato; null finche' non e' approvata)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approvato_da")
     private Utente approvatoDa;
@@ -75,7 +71,5 @@ public class Missione extends Auditable {
 
     @Column(name = "motivo_annullamento")
     private String motivoAnnullamento;
-
-    // data_creazione e ultima_modifica ereditate da Auditable
 }
 

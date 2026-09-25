@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** Catalogo dei tipi di asset (Generatore, Rover, Serra...). Tabella: tipi_asset. */
 @Entity
 @Table(name = "tipi_asset")
 @Getter
@@ -13,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TipoAsset {
 
-    // id_tipo_asset e' SERIAL (int4) -> Integer, non Long
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tipo_asset")

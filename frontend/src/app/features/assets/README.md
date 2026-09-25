@@ -5,7 +5,7 @@ Questo modulo gestisce i form e le operazioni CRUD relative agli asset nel siste
 ## Struttura
 
 - **models/**: Contiene i modelli TypeScript (Asset, CreateAssetRequest)
-- **services/**: Contiene il servizio AssetService per le API calls
+- **services/**: Contiene il servizio AssetService per le chiamate API
 - **form-asset/**: Contiene il componente form per la gestione degli asset
 
 ## Componente: AssetForm
@@ -28,7 +28,7 @@ import { AssetForm } from './features/assets/asset-form/asset-form';
 }
 ```
 
-### Form Fields
+### Campi del form
 - **Codice** (richiesto): Codice univoco dell'asset
 - **Nome** (richiesto): Nome descrittivo dell'asset
 - **Criticità di Default** (richiesto): Livello di priorità predefinita
@@ -37,7 +37,7 @@ import { AssetForm } from './features/assets/asset-form/asset-form';
   - ALTA
   - VITALE
 
-## API Endpoint
+## Endpoint API
 
 Tutti gli endpoint sono esposti via `AssetService`:
 
@@ -46,10 +46,10 @@ Tutti gli endpoint sono esposti via `AssetService`:
 - `POST /api/assets/aggiungi-asset` - Crea o aggiorna un asset
 - `DELETE /api/assets/cancella/{id}` - Elimina un asset
 
-## Styling
+## Stili
 
 Il componente usa SCSS con:
-- Layout responsive (grid 2 colonne, 1 colonna su mobile)
-- Stili personalizzati per badge di criticità
-- Animazioni smooth su hover
+- Layout adattivo (griglia a 2 colonne, 1 colonna su mobile)
+- Stili personalizzati per i badge di criticità
+- Animazioni fluide al passaggio del mouse
 - Validazione visiva dei form

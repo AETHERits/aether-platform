@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Colonia extends Auditable {
 
-    // id_colonia e' SERIAL (int4) -> Integer
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_colonia")
@@ -39,7 +38,6 @@ public class Colonia extends Auditable {
     @Column(name = "stato_operativo", nullable = false, length = 20)
     private StatoOperativoColonia statoOperativo;
 
-    // N:1 -> astronauti. La FK e' circolare (astronauti.id_colonia <-> colonie.id_responsabile)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_responsabile")
     private Astronauta responsabile;
