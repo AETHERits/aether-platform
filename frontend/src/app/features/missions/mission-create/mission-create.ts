@@ -50,7 +50,8 @@ export class MissionCreate implements OnInit {
     STANDARD: 'Standard', ELEVATED: 'Elevato', HIGH_RISK: 'Alto rischio', CRITICAL: 'Critico'
   };
   readonly statusLabels: Record<string, string> = {
-    DRAFT: 'Bozza', PLANNING: 'Pianificata', IN_PROGRESS: 'In corso',
+    DRAFT: 'Bozza', PLANNED: 'Pianificata', APPROVED: 'Approvata',
+    IN_PROGRESS: 'In corso', SUSPENDED: 'Sospesa',
     COMPLETED: 'Completata', CANCELLED: 'Annullata'
   };
 
@@ -184,7 +185,12 @@ export class MissionCreate implements OnInit {
 
     this.submitting = true;
 
-    const payload: MissionCreateRequest = this.form.value;
+    const raw = this.form.getRawValue();
+    const payload: MissionCreateRequest = {
+      ...raw,
+      plannedStartAt: toIsoDateTime(raw.plannedStartAt),
+      plannedEndAt: toIsoDateTime(raw.plannedEndAt)
+    };
 
     this.missionService.createMission(payload)
       .pipe(
@@ -217,4 +223,15 @@ export class MissionCreate implements OnInit {
         }
       });
   }
+}
+
+function toIsoDateTime(value: string): string {
+  if (!value) {
+    return value;
+  }
+  if (value.endsWith('Z') || /[+-]\d{2}:\d{2}$/.test(value)) {
+    return value;
+  }
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
 }

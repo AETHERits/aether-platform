@@ -1,72 +1,80 @@
 package com.aether.backend.service.impl;
 
-import com.aether.backend.service.AssetService;
 import com.aether.backend.dto.AssetDTO;
-import com.aether.backend.entity.Asset;
-import com.aether.backend.mapper.AssetMapper;
-import com.aether.backend.repository.AssetRepository;
+import com.aether.backend.entity.TipoAsset;
+import com.aether.backend.exception.ConflictException;
 import com.aether.backend.exception.ResourceNotFoundException;
+import com.aether.backend.mapper.AssetMapper;
+import com.aether.backend.repository.TipoAssetRepository;
+import com.aether.backend.service.AssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AssetServiceImpl implements AssetService {
 
-    private final AssetRepository assetRepository;
+    private final TipoAssetRepository tipoAssetRepository;
     private final AssetMapper assetMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<AssetDTO> getAllAssets() {
-        return assetRepository.findAll().stream()
+        return tipoAssetRepository.findAll().stream()
                 .map(assetMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-
-
     @Override
+    @Transactional(readOnly = true)
     public AssetDTO getAssetById(Long id) {
-        Asset asset = assetRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
-
-        return assetMapper.toDTO(asset);
+        return assetMapper.toDTO(trova(id));
     }
 
     @Override
+    @Transactional
     public String updateAsset(AssetDTO dto) {
-        String msg="";
+        if (dto.getCodice() == null || dto.getCodice().isBlank()
+                || dto.getNome() == null || dto.getNome().isBlank()
+                || dto.getCriticitaDiDefault() == null) {
+            throw new IllegalArgumentException(
+                    "Impossibile salvare il tipo asset: valorizzare codice, nome e criticita di default");
+        }
 
-        if (dto.getId_tipo_asset()!=null) {
-            Asset asset = assetMapper.toEntity(dto);
-            assetRepository.save(asset);
+        String codice = dto.getCodice().trim();
+        dto.setCodice(codice);
+        dto.setNome(dto.getNome().trim());
+
+        if (dto.getId() != null) {
+            if (tipoAssetRepository.existsByCodiceIgnoreCaseAndIdNot(codice, dto.getId())) {
+                throw new ConflictException("Esiste gia' un tipo asset con codice '" + codice + "'");
+            }
+            TipoAsset esistente = trova(dto.getId().longValue());
+            assetMapper.apply(dto, esistente);
+            tipoAssetRepository.save(esistente);
             return "Asset modificato con successo";
         }
-        else {
-                if (dto.getNome() != null && dto.getCodice() != null &&
-                        dto.getCriticita_di_default() != null ) {
-                    Asset a = AssetMapper.toEntity(dto);
-                    assetRepository.save(a);
-                    msg = "Asset aggiunto con successo!";
-                } else {
-                    msg = "Impossibile aggiungere asset: valorizzare tutti i campi con valori validi !";
-                }
 
-            } return msg;
-
+        if (tipoAssetRepository.existsByCodiceIgnoreCase(codice)) {
+            throw new ConflictException("Esiste gia' un tipo asset con codice '" + codice + "'");
+        }
+        tipoAssetRepository.save(assetMapper.toEntity(dto));
+        return "Asset aggiunto con successo!";
     }
 
     @Override
+    @Transactional
     public String delete(Long id) {
-        if(assetRepository.existsById(id)){
-            assetRepository.deleteById(id);
-            return "Asset eliminato con successo.";
-        } else {
-            return "Id Asset non presente.";
-        }
+        TipoAsset tipoAsset = trova(id);
+        tipoAssetRepository.delete(tipoAsset);
+        return "Asset eliminato con successo.";
+    }
 
+    private TipoAsset trova(Long id) {
+        return tipoAssetRepository.findById(id.intValue())
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 }

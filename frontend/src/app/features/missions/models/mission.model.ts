@@ -4,7 +4,9 @@ export type MissionType =
 
 export type MissionPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type MissionSafetyLevel = 'STANDARD' | 'ELEVATED' | 'HIGH_RISK' | 'CRITICAL';
-export type MissionStatus = 'DRAFT';
+export type MissionStatus =
+  | 'DRAFT' | 'PLANNED' | 'APPROVED' | 'IN_PROGRESS'
+  | 'SUSPENDED' | 'COMPLETED' | 'CANCELLED';
 
 export interface MissionCreateRequest {
   title: string;

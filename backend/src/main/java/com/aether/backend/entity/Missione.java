@@ -12,14 +12,14 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Missione {
+public class Missione extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_missione")
     private Long id;
 
-    @Column(name = "codice", nullable = false, length = 20)
+    @Column(name = "codice", nullable = false, unique = true, length = 20)
     private String codice;
 
     @Column(name = "obiettivo", nullable = false, length = 255)
@@ -28,11 +28,15 @@ public class Missione {
     @Column(name = "descrizione")
     private String descrizione;
 
-    @Column(name = "id_colonia", nullable = false)
-    private Long idColonia;
+    // N:1 -> colonie
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_colonia", nullable = false)
+    private Colonia colonia;
 
-    @Column(name = "id_tipologia", nullable = false)
-    private Long idTipologia;
+    // N:1 -> tipologie_missione
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_tipologia", nullable = false)
+    private TipologiaMissione tipologia;
 
     @Column(name = "data_inizio_prevista", nullable = false)
     private OffsetDateTime dataInizioPrevista;
@@ -52,28 +56,26 @@ public class Missione {
     @Column(name = "stato", nullable = false, length = 20)
     private StatoMissione stato;
 
-    @Column(name = "id_responsabile", nullable = false)
-    private Long idResponsabile;
+    // N:1 -> astronauti (responsabile della missione)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_responsabile", nullable = false)
+    private Astronauta responsabile;
 
-    @Column(name = "data_creazione", nullable = false, updatable = false)
-    private OffsetDateTime dataCreazione;
+    // N:1 -> utenti (chi ha approvato; null finche' non e' approvata)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "approvato_da")
+    private Utente approvatoDa;
 
-    @Column(name = "ultima_modifica", nullable = false)
-    private OffsetDateTime ultimaModifica;
+    @Column(name = "data_approvazione")
+    private OffsetDateTime dataApprovazione;
 
-    /** Valorizza i timestamp alla prima persistenza: il service non deve piu' occuparsene. */
-    @PrePersist
-    void prePersist() {
-        OffsetDateTime adesso = OffsetDateTime.now();
-        if (dataCreazione == null) {
-            dataCreazione = adesso;
-        }
-        ultimaModifica = adesso;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "livello_sicurezza", nullable = false, length = 20)
+    private LivelloSicurezza livelloSicurezza = LivelloSicurezza.STANDARD;
 
-    /** Aggiorna automaticamente ultima_modifica a ogni UPDATE (modifica dati o cambio stato). */
-    @PreUpdate
-    void preUpdate() {
-        ultimaModifica = OffsetDateTime.now();
-    }
+    @Column(name = "motivo_annullamento")
+    private String motivoAnnullamento;
+
+    // data_creazione e ultima_modifica ereditate da Auditable
 }
+

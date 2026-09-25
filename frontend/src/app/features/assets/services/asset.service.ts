@@ -20,10 +20,10 @@ export class AssetService {
   }
 
   createOrUpdateAsset(asset: Asset | CreateAssetRequest): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/aggiungi-asset`, asset);
+    return this.http.post(`${this.apiUrl}/aggiungi-asset`, asset, { responseType: 'text' });
   }
 
   deleteAsset(id: number): Observable<string> {
-    return this.http.delete<string>(`${this.apiUrl}/cancella/${id}`);
+    return this.http.delete(`${this.apiUrl}/cancella/${id}`, { responseType: 'text' });
   }
 }

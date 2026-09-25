@@ -3,6 +3,7 @@ package com.aether.backend.controller;
 import com.aether.backend.dto.AssetDTO;
 import com.aether.backend.service.AssetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +27,13 @@ public class AssetController {
         return ResponseEntity.ok(assetService.getAssetById(id));
     }
 
-    @PostMapping("/aggiungi-asset")
+    @PostMapping(value = "/aggiungi-asset", produces = MediaType.TEXT_PLAIN_VALUE)
     public String update(@RequestBody AssetDTO dto) {
         return assetService.updateAsset(dto);
     }
 
-    @DeleteMapping("/cancella/{id}")
-    public String delete(@PathVariable Long id){
+    @DeleteMapping(value = "/cancella/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String delete(@PathVariable Long id) {
         return assetService.delete(id);
     }
 

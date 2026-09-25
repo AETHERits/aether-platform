@@ -1,13 +1,23 @@
 package com.aether.backend.dto;
 
 import com.aether.backend.entity.CriticitaAsset;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class AssetDTO {
-    private Long id_tipo_asset;
+
+    @JsonProperty("id_tipo_asset")
+    private Integer id;
+
     private String codice;
+
     private String nome;
-    private CriticitaAsset criticita_di_default;
+
+    @JsonProperty("criticita_di_default")
+    private CriticitaAsset criticitaDiDefault;
 }

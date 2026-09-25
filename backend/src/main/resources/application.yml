@@ -5,29 +5,37 @@ spring:
     active: dev
 
 ---
+# Profilo di Sviluppo (PostgreSQL su Supabase)
 spring:
   config:
     activate:
       on-profile: dev
+
   datasource:
-    url: ${DB_URL:jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require&currentSchema=aether&prepareThreshold=0}
+    # Session Mode (porta 5432). Se usi il Transaction Pooler (6543) aggiungi
+    # prepareThreshold=0 all'URL: i prepared statement lato server non sono compatibili.
+    url: ${DB_URL:jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require}}
     driver-class-name: org.postgresql.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${DB_USERNAME:postgres.uswqqwtlcpkbxydczkyr}
+    # Nessun valore di default: impostare la variabile d'ambiente DB_PASSWORD
+    password: ${DB_PASSWORD:postgresits.}
     hikari:
       maximum-pool-size: 5
-  jpa:
-    properties:
-      hibernate:
-        default_schema: aether
-    hibernate:
-      ddl-auto: validate
+
   flyway:
-    enabled: true
-    schemas: aether
-    default-schema: aether
     baseline-on-migrate: true
-    baseline-version: 2
+    # Migrazioni: Session Mode (porta 5432), sessione stabile per transazioni
+    # e advisory lock di Flyway. Flyway apre una connessione dedicata e la chiude a fine migrazione.
+    url: ${FLYWAY_URL:jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require}
+    user: ${DB_USERNAME:postgres.uswqqwtlcpkbxydczkyr}
+    password: ${DB_PASSWORD:postgresits.}
+
+  jpa:
+    hibernate:
+      # Lo schema e' di Flyway (V1/V2). update qui ha creato colonne extra (id, priority)
+      # in conflitto con tipi_asset. validate controlla le entity senza alterare il DB.
+      ddl-auto: validate
+    show-sql: true
 
 server:
   port: ${PORT:8080}
