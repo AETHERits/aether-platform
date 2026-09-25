@@ -54,7 +54,7 @@ public class ColoniaService {
         Colonia entity = coloniaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot update. Colony not found with ID: " + id));
 
-        if (coloniaRepository.existsByCodiceAndIdNot(responseDto.getCodice(), id)) {
+        if (coloniaRepository.existsByCodiceAndIdColoniaNot(responseDto.getCodice(), id)) {
             throw new ConflictException("The code " + responseDto.getCodice() + " is already used by another colony.");
         }
 
@@ -79,7 +79,7 @@ public class ColoniaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot patch. Colony not found with ID: " + id));
 
         if (responseDto.getCodice() != null && !responseDto.getCodice().isBlank()) {
-            if (coloniaRepository.existsByCodiceAndIdNot(responseDto.getCodice(), id)) {
+            if (coloniaRepository.existsByCodiceAndIdColoniaNot(responseDto.getCodice(), id)) {
                 throw new ConflictException("The code " + responseDto.getCodice() + " is already used by another colony.");
             }
             entity.setCodice(responseDto.getCodice());

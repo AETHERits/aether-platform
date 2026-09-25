@@ -1,6 +1,7 @@
 package com.aether.backend.dto;
 
 import com.aether.backend.entity.StatoOperativoColonia;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -33,10 +34,9 @@ public class ColoniaResponse {
     private String coordinate;
 
     @NotNull(message = "Operational status is mandatory.")
-    @Pattern(regexp = "^(ATTIVA|INATTIVA|MANUTENZIONE|DISMESSA)$",
-            message = "Status must be one of: ATTIVA, INATTIVA, MANUTENZIONE, DISMESSA.")
     private StatoOperativoColonia statoOperativoColonia;
 
+    @JsonIgnore
     private Boolean cancellato; // Generates setCancellato() and getCancellato() via Lombok @Data
 
     public ColoniaResponse(String codice, String nome, StatoOperativoColonia statoOperativoColonia) {

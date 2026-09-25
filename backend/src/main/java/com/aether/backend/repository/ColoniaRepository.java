@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface ColoniaRepository extends JpaRepository<Colonia, Long> {
     List<Colonia> findByCancellatoFalse();
     boolean existsByCodice(String codice);
-    boolean existsByCodiceAndIdNot(String codice, Long id);
+    boolean existsByCodiceAndIdColoniaNot(String codice, Long id);
     Optional<Colonia> findByCodice(String codice);
 }

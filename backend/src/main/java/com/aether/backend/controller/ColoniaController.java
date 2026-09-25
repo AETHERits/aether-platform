@@ -2,6 +2,9 @@ package com.aether.backend.controller;
 
 import com.aether.backend.dto.ColoniaResponse;
 import com.aether.backend.service.ColoniaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/colonie")
+@RequestMapping("/api/v1/colonie")
 public class ColoniaController {
 
     private final ColoniaService coloniaService;
@@ -61,6 +64,11 @@ public class ColoniaController {
     // DELETE /api/colonie/{id} - Soft delete a colony (BR-010)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Elimina una colonia per ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Colonia eliminata con successo"),
+            @ApiResponse(responseCode = "404", description = "Colonia non trovata")
+    })
     public ResponseEntity<Void> deleteColonia(@PathVariable Long id) {
         coloniaService.deleteOrDeactivate(id);
         return ResponseEntity.noContent().build();

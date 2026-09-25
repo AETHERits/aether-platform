@@ -40,15 +40,6 @@ public class IncidenteController {
     }
 
     /**
-     * Elenco delle colonie/basi per la select "Base" del form.
-     * Lettura pura: nessuna modifica ai dati.
-     */
-    @GetMapping("/colonie")
-    public List<Colonia> listaColonie() {
-        return colonie.findAll();
-    }
-
-    /**
      * Registra un nuovo incidente.
      *
      * @Valid attiva il Bean Validation sul DTO: payload invalido -> 400
